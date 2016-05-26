@@ -14,7 +14,7 @@ compile php embed sapi (the important option are "--enable-embed"):
 
 for example to have libphp5.so embeded library with snmp, ldap, curl and mysqli shared module.
 
-# build
+# Build
 
 compile the zbx_php module with php (the importante option are "--with-php=..."):
   ./configure --prefix=/path/to/zabbix/install/dir \
@@ -23,7 +23,7 @@ compile the zbx_php module with php (the importante option are "--with-php=...")
 	      
 Run 'make' to build it. It should produce zbx_php.so.
 
-# configure zbx_php with zabbix
+# Configure zbx_php with zabbix
 
 Zabbix agent, server and proxy support two parameters to deal with modules:
 
@@ -37,7 +37,7 @@ For example, to extend Zabbix agent we could add the following parameters:
 
 Upon agent startup it will load the zbx_php.so modules from the /usr/local/lib/zabbix/agent directory. It will fail if a module is missing, in case of bad permissions or if a shared library is not a Zabbix module.
 
-# zabbix Frontend configuration
+# Zabbix Frontend configuration
 
 Loadable modules are supported by Zabbix agent, server and proxy. Therefore, item type in Zabbix frontend depends on where the module is loaded. If the module is loaded into the agent, then the item type should be “Zabbix agent” or “Zabbix agent (active)”. If the module is loaded into server or proxy, then the item type should be “Simple check”.
 

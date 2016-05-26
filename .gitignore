@@ -1,0 +1,9 @@
+config.log 
+config.status 
+Makefile
+autom4te.cache
+.libs
+*.o
+*.so
+*.lo
+*.la

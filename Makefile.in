@@ -1,0 +1,22 @@
+MODULE_NAME=zbx-php
+MODULE_OBJS=$(MODULE_NAME).o php_embeded.o
+CFLAGS=@CFLAGS@
+LDFLAGS=@LDFALGS@
+LIBS=@LIBS@
+
+all: $(MODULE_NAME).la
+
+$(MODULE_NAME).la: $(MODULE_NAME).c
+	gcc -fPIC -c $@ $(CFLAGS)
+
+install: $(MODULE_NAME).la
+$(MODULE_NAME).so: $(MODULE_OBJS)
+	gcc -fPIC -shared $(LDFLAGS) $(LIBS) -o $(MODULE_NAME).so $@ 
+
+clean:
+	-rm -f $(MODULE_OBJS) $(MODULE_NAME).lo $(MODULE_NAME).la $(MODULE_NAME).slo 
+	-rm -rf .libs
+
+distclean: clean
+	-rm -f config.log config.status Makefile
+	-rm -rf autom4te.cache 

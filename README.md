@@ -7,20 +7,24 @@ Agent/Server/Proxy.
 
 PHP libphp.so Embed SAPI:
 
-compile php embed sapi (the important option are "--enable-embed"):
+Compile PHP Embed SAPI (the important option are "--enable-embed"):
+```
   ./configure --enable-embed --prefix=/path/to/php/install/dir \
   --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
   --with-curl=shared  --with-mysqli=shared 
+```
 
 for example to have libphp5.so embeded library with snmp, ldap, curl and mysqli shared module.
 
 # Build
 
-compile the zbx_php module with php (the importante option are "--with-php=..."):
-  ./configure --prefix=/path/to/zabbix/install/dir \
+Compile the zbx_php module with php (the importante option are "--with-php=..."):
+
+```
+   ./configure --prefix=/path/to/zabbix/install/dir \
 	      --enable-server  \
 	      --with-php=/path/to/php/install/dir
-	      
+```	      
 Run 'make' to build it. It should produce zbx_php.so.
 
 # Configure zbx_php with zabbix
@@ -32,8 +36,10 @@ Zabbix agent, server and proxy support two parameters to deal with modules:
 
 For example, to extend Zabbix agent we could add the following parameters:
 
+```
 	LoadModulePath=/usr/local/lib/zabbix/agent/
 	LoadModule=zbx_php.so
+```
 
 Upon agent startup it will load the zbx_php.so modules from the /usr/local/lib/zabbix/agent directory. It will fail if a module is missing, in case of bad permissions or if a shared library is not a Zabbix module.
 

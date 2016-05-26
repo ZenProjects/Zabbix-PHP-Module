@@ -12,11 +12,12 @@ How to compile it (the important option are "--enable-embed") :
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
 		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
 		      --with-curl=shared  --with-mysqli=shared 
+# make
+# make install
 ```
-
 For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli shared module.
 
-# Build
+# How to Build the module
 
 Compile the zbx_php module with php (the importante option are "--with-php=..."):
 
@@ -24,8 +25,10 @@ Compile the zbx_php module with php (the importante option are "--with-php=...")
 # ./configure --prefix=/path/to/zabbix/install/dir \
               --enable-server  \
               --with-php=/path/to/php/install/dir
+# make
+# make install
 ```	      
-Run 'make' to build it. It should produce zbx_php.so.
+It should produce zbx_php.so.
 
 # Configure zbx_php with zabbix
 

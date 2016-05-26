@@ -1,6 +1,6 @@
 # Zabbix PHP Loadable Module
 
-This directory contains a Zabbix Loadable module, which extends functionality of Zabbix
+This directory contains a [Zabbix Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix
 Agent/Server/Proxy. 
 
 # Prerequisite :

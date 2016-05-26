@@ -43,4 +43,4 @@ Loadable modules are supported by Zabbix agent, server and proxy. Therefore, ite
 
 	zbx_php.ping - always returns '1'
 	zbx_php.version - returns the php version
-	zbx_php.php[phpscript, param1, param2, ...] - execuce phpscript with params
+	zbx_php.php[phpscript, param1, param2, ...] - execute phpscript with params

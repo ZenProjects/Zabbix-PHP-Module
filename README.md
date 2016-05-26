@@ -9,9 +9,9 @@ The **PHP Embed SAPI - libphp.so** :
 
 How to compile it (the important option are "--enable-embed") :
 ```
-	./configure --enable-embed --prefix=/path/to/php/install/dir \
-		        --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
-		        --with-curl=shared  --with-mysqli=shared 
+# ./configure --enable-embed --prefix=/path/to/php/install/dir \
+		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
+		      --with-curl=shared  --with-mysqli=shared 
 ```
 
 For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli shared module.
@@ -21,9 +21,9 @@ For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli 
 Compile the zbx_php module with php (the importante option are "--with-php=..."):
 
 ```
-	./configure --prefix=/path/to/zabbix/install/dir \
-	            --enable-server  \
-	            --with-php=/path/to/php/install/dir
+# ./configure --prefix=/path/to/zabbix/install/dir \
+              --enable-server  \
+              --with-php=/path/to/php/install/dir
 ```	      
 Run 'make' to build it. It should produce zbx_php.so.
 

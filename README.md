@@ -10,8 +10,8 @@ The **PHP Embed SAPI - libphp.so** :
 How to compile it (the important option are "--enable-embed") :
 ```
 	./configure --enable-embed --prefix=/path/to/php/install/dir \
-		    --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
-		    --with-curl=shared  --with-mysqli=shared 
+		        --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
+		        --with-curl=shared  --with-mysqli=shared 
 ```
 
 For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli shared module.

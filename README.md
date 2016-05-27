@@ -1,8 +1,17 @@
 [![Stories in Ready](https://badge.waffle.io/ZenProjects/ZBX-PHP.png?label=ready&title=Ready)](https://waffle.io/ZenProjects/ZBX-PHP)
 # Zabbix PHP Loadable Module
 
-This directory contains a [Zabbix Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix
-Agent/Server/Proxy. 
+This directory contains a [Zabbix Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy. 
+
+Like [zlm-cython](https://github.com/vulogov/zlm-cython) this module is loading PHP interpreter inside Zabbix Server/Proxy/Agent address space.
+
+Is based on my precedente work https://www.zabbix.com/forum/showthread.php?t=8305 to add the possibility to call script inside the zabbix engine.
+
+it's at this epoc that i'have exchanged with Alexei Vladishev to add the possibility of loadable module...
+
+Now is done ! thank Alexei !
+
+With that module you can extend functionality of the Zabbix with PHP module at the infinite.
 
 # Prerequisite :
 

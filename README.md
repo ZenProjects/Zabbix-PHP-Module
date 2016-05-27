@@ -63,7 +63,7 @@ Loadable modules are supported by Zabbix agent, server and proxy. Therefore, ite
 
 - **zbx_php.ping** - always returns '1'
 - **zbx_php.version** - returns the php version
-- **zbx_php.php[phpscript.php, param1, param2, ...]** - execute phpscript with params
+- **php[phpscript.php, param1, param2, ...]** - execute phpscript with params
 
 # configure module
 
@@ -117,7 +117,7 @@ by **default** the php ini parametter are to :
 
 To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with arguments "mon test a moi" by the module:
 ```
-# zabbix_get  -s 127.0.0.1 -k zbx_php.php[test.php,mon test a moi]
+# zabbix_get  -s 127.0.0.1 -k php[test.php,mon test a moi]
 ....
 ```
 

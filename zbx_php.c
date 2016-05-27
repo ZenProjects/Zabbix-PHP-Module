@@ -24,6 +24,8 @@
 int		zbx_php_timeout = 0;
 char        	*php_path = NULL;
 
+#define ZBX_MODULE "ZBX_MODULE "
+
 int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result);
 int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result);
 int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result);
@@ -117,21 +119,21 @@ int load_php_env_config(void)  {
     // then get basepath and add zbx_php.cfg.
     if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE))!=SUCCESS)
     {
-      zabbix_log( LOG_LEVEL_ERR, "load_php_env_config get base path error : %d!!!!", ret);
+      zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config get base path error : %d!!!!", ret);
       return ZBX_MODULE_FAIL;
     }
 
     zbx_snprintf(conf_file, BUFSIZE, "%szbx_php.conf", base_path);
-    zabbix_log( LOG_LEVEL_INFORMATION, "Module Config lodaded from %s", conf_file);
+    zabbix_log( LOG_LEVEL_INFORMATION, ZBX_MODULE "Module Config lodaded from %s", conf_file);
     
     // use zabbix config parser
     if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)
     {
-       zabbix_log( LOG_LEVEL_ERR, "load_php_env_config parse file error!!!!");
+       zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config parse file error!!!!");
        return ZBX_MODULE_FAIL;
     }
 
-    zabbix_log( LOG_LEVEL_INFORMATION, "Module PHP_SCRIPT_PATH set to %s", php_path);
+    zabbix_log( LOG_LEVEL_INFORMATION, ZBX_MODULE "Module PHP_SCRIPT_PATH set to %s", php_path);
     return ZBX_MODULE_OK;
 }
 
@@ -155,7 +157,7 @@ int	zbx_module_init()
 	// load zbx_php.cfg config file
 	if (load_php_env_config()!=ZBX_MODULE_OK) 
 	{
-	 zabbix_log( LOG_LEVEL_ERR, "load_php_env_config error!!!!");
+	 zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config error!!!!");
 	 return ZBX_MODULE_FAIL;
 	}
 
@@ -164,7 +166,7 @@ int	zbx_module_init()
 	// initialization for zbx_php_call 
 	if (php_embed_minit(MY_HARDCODED_INI TSRMLS_CC)!=SUCCESS) 
 	{
-	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
+	  zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "php_embed_minit error!!!!");
 	  return ZBX_MODULE_FAIL;
 	}
 
@@ -259,7 +261,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	int     ret = SYSINFO_RET_OK;
 
-	zabbix_log( LOG_LEVEL_DEBUG, "In get_value_php([%s])",request->key);
+	zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "In get_value_php([%s])",request->key);
 
 	// zabbix init result
 	//init_result(result);
@@ -279,15 +281,14 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	   return SYSINFO_RET_FAIL;
 	}
 
-	zbx_snprintf(cmd, MAX_STRING_LEN-1, "Executing PHP script -%s-", php_script_filename);
-	zabbix_log( LOG_LEVEL_INFORMATION, "%s", cmd );
+	zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "Executing PHP script : %s", php_script_filename );
 
 	////////////////////////////////////////
 	//// php request init - "RINIT" phase
 	////////////////////////////////////////
 	if (php_embed_rinit(TSRMLS_C)!=SUCCESS) 
 	{
-	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
+	  zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "php_embed_minit error!!!!");
 	  return SYSINFO_RET_OK;
 	}
 
@@ -299,11 +300,12 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  // set php execution timeout with request->timeout
 	  new_timeout_strlen = spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
 
+	  zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "Set execution timeout to : %s", new_timeout_str );
 	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
 	  {
 	        efree(new_timeout_str);
 		zbx_snprintf(error,MAX_STRING_LEN-1,"setting execution timeout to [%d] not succed", zbx_php_timeout);
-		zabbix_log( LOG_LEVEL_ERR, "%s", error);
+		zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "%s", error);
 		SET_STR_RESULT(result, strdup(error));
 	        ret=SYSINFO_RET_FAIL;
 		zend_bailout();
@@ -320,7 +322,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  MAKE_STD_ZVAL(php_key); // initialize an php variable to contains the request->key string
 	  MAKE_STD_ZVAL(php_timeout); // initialize an php variable to contains the request->timeout value
 
-	  ZVAL_LONG(php_key, zbx_php_timeout);
+	  ZVAL_LONG(php_timeout, zbx_php_timeout);
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_timeout", php_timeout);
 
 	  ZVAL_STRING(php_key, request->key, 1);
@@ -341,7 +343,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  if ((retval=php_embed_execute(php_script_filename TSRMLS_CC)) == NULL) 
 	  {
 	      zbx_snprintf(error,MAX_STRING_LEN-1,"External check [%s] is not supported, failed execution", request->key);
-	      zabbix_log( LOG_LEVEL_ERR, "%s", error);
+	      zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "%s", error);
 	      SET_STR_RESULT(result, strdup(error));
 	      ret=SYSINFO_RET_FAIL;
 	      zend_bailout();
@@ -353,7 +355,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	    // display the ret val value in string
 	    convert_to_string(retval);
-	    zabbix_log(LOG_LEVEL_DEBUG, "PHP script code returned: -%s-", Z_STRVAL_P(retval));
+	    zabbix_log(LOG_LEVEL_DEBUG, ZBX_MODULE "PHP script code returned: -%s-", Z_STRVAL_P(retval));
 
 	    // free php ressource
 	    zval_dtor(retval);

@@ -110,10 +110,10 @@ int php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS
  * Purpose: execute filename script.                                          *
  *                                                                            *
  ******************************************************************************/
-int php_embed_execute(char *filename TSRMLS_DC)
+zval * php_embed_execute(char *filename TSRMLS_DC)
 {
     int ret = 0;
-
+    zval *retval = NULL;
     zend_file_handle zfd;
 
     zfd.type = ZEND_HANDLE_FILENAME;
@@ -122,9 +122,10 @@ int php_embed_execute(char *filename TSRMLS_DC)
     zfd.free_filename = 0;
     zfd.opened_path = NULL;
     zend_try {
-	 ret = php_execute_script(&zfd TSRMLS_CC);
+	 if (SUCCESS == zend_execute_scripts(ZEND_REQUIRE TSRMLS_CC, &retval, 1, &zfd)) 
+	     if (retval) return retval;
     } zend_end_try();
-    return ret == FAILURE;
+    return retval;
 }
 
 

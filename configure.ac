@@ -41,9 +41,11 @@ AC_SUBST([MODULE_NAME])
 AC_SUBST([CFLAGS])
 AC_SUBST([LDFLAGS])
 AC_SUBST([LIBS])
+AC_SUBST([prefix])
 
 AC_OUTPUT(zbx_php_config.h Makefile)
 
 echo ""
-echo " Embeded PHP base directory     = ${PHP_PREFIX}"
-echo " Zabbix include directory       = ${ZABBIX_INC_DIR}"
+echo " Zabbix PHP laodable module install diretory   = ${prefix}"
+echo " Embeded PHP base directory                    = ${PHP_PREFIX}"
+echo " Zabbix include directory                      = ${ZABBIX_INC_DIR}"

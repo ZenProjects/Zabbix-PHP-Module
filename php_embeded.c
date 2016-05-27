@@ -89,17 +89,19 @@
  * Purpose: eval php script string transmit in code.                           *
  *                                                                            *
  ******************************************************************************/
-int php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS_DC)
+zval * php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS_DC)
 {
     int ret = 0;
+    zval *retval = NULL;
 
     zend_try {
-        ret = zend_eval_string(code, NULL, string_name TSRMLS_CC);
+	 if (SUCCESS == zend_eval_string(code, &retval, string_name TSRMLS_CC)) 
+	     if (retval) return retval;
     } zend_catch {
 
     } zend_end_try();
 
-    return ret == FAILURE;
+    return retval;
 }
 
 

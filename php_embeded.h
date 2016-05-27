@@ -34,62 +34,14 @@
 #include "zend_API.h"
 #include "TSRM.h"
 
-
-/*
-
-#ifdef ZTS
-#define PTSRMLS_D        void ****ptsrm_ls
-#define PTSRMLS_DC       , PTSRMLS_D
-#define PTSRMLS_C        &tsrm_ls
-#define PTSRMLS_CC       , PTSRMLS_C
-
-#define PHP_EMBED_START_BLOCK(x,y) { \
-    void ***tsrm_ls; \
-    php_embed_init(x, y PTSRMLS_CC); \
-    zend_first_try {
-
-#else
-#define PTSRMLS_D
-#define PTSRMLS_DC
-#define PTSRMLS_C
-#define PTSRMLS_CC
-
-#define PHP_EMBED_START_BLOCK(x,y) { \
-    php_embed_init(x, y); \
-    zend_first_try {
-
-#endif
-
-#define PHP_EMBED_END_BLOCK() \
-  } zend_catch { \
-  } zend_end_try(); \
-  php_embed_shutdown(TSRMLS_C); \
-}
-
-#ifndef PHP_WIN32
-    #define EMBED_SAPI_API SAPI_API
-#else
-    #define EMBED_SAPI_API
-#endif
-
-*/
-#define HARDCODED_INI			\
-	"html_errors=0\n"		\
-	"register_argc_argv=1\n"	\
-	"implicit_flush=1\n"		\
-	"output_buffering=0\n"		\
-	"max_execution_time=0\n"	\
-	"max_input_time=-1\n"
-
-//extern zend_class_entry *default_exception_ce;
-
-int 		php_embed_rinit(TSRMLS_D);
-ZEND_API void 	php_embed_excute(zval *exception TSRMLS_DC);
-ZEND_API int 	php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC);
+ int 		php_embed_rinit(TSRMLS_D);
+void 		php_embed_excute(zval *exception TSRMLS_DC);
+int 		php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC);
 void 		php_embed_mshutdown(TSRMLS_D);
 void 		php_embed_rshutdown(TSRMLS_D);
 
 BEGIN_EXTERN_C()
+extern char HARDCODED_INI[];
 extern const zend_function_entry additional_functions[];
 END_EXTERN_C()
 

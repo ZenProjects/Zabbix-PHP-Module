@@ -86,73 +86,22 @@
  * Purpose: eval php script string transmit in str.                           *
  *                                                                            *
  ******************************************************************************/
-ZEND_API int php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC)
+int php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS_DC)
 {
-	zval pv;
-	zend_op_array *new_op_array;
-	zend_uchar original_handle_op_arrays;
-	int retval;
-	/*
-	zend_op_array *original_active_op_array = EG(active_op_array);
-	zend_function_state *original_function_state_ptr = EG(function_state_ptr);
+    int ret = 0;
 
-	pv.value.str.len = strlen(str);
-	pv.value.str.val = estrndup(str, pv.value.str.len);
-	pv.type = IS_STRING;
+    zend_try {
+        ret = zend_eval_string(code, NULL, string_name TSRMLS_CC);
+    } zend_catch {
 
-	// compile string_name to new_op_array
-	original_handle_op_arrays = CG(handle_op_arrays);
-	CG(handle_op_arrays) = 0;
-	new_op_array = zend_compile_string(&pv, string_name TSRMLS_CC);
-	CG(handle_op_arrays) = original_handle_op_arrays;
+    } zend_end_try();
 
-	if (new_op_array) {
-		zval *local_retval_ptr=NULL;
-		zval **original_return_value_ptr_ptr = EG(return_value_ptr_ptr);
-		zend_op **original_opline_ptr = EG(opline_ptr);
-
-		EG(return_value_ptr_ptr) = &local_retval_ptr;
-		EG(active_op_array) = new_op_array;
-		EG(no_extensions)=1;
-
-		// execute new_op_array script code
-		zend_execute(new_op_array TSRMLS_CC);
-
-		if (local_retval_ptr) {
-			if (retval_ptr) {
-				COPY_PZVAL_TO_ZVAL(*retval_ptr, local_retval_ptr);
-			} else {
-				zval_ptr_dtor(&local_retval_ptr);
-			}
-		} else {
-			if (retval_ptr) {
-				INIT_ZVAL(*retval_ptr);
-			}
-		}
-
-		EG(no_extensions)=0;
-		EG(opline_ptr) = original_opline_ptr;
-		EG(active_op_array) = original_active_op_array;
-		EG(function_state_ptr) = original_function_state_ptr;
-		destroy_op_array(new_op_array TSRMLS_CC);
-		efree(new_op_array);
-		EG(return_value_ptr_ptr) = original_return_value_ptr_ptr;
-		retval = SUCCESS;
-	} else {
-		retval = FAILURE;
-	}
-	zval_dtor(&pv);
-	*/
-	return retval;
+    return ret == FAILURE;
 }
 
 
-ZEND_API int php_embed_execute(char *filename, char* key, char**params PTSRMLS_DC)
+int php_embed_execute(char *filename, char* key, char**params TSRMLS_DC)
 {
-#ifdef ZTS
-	void ***tsrm_ls;
-#endif
-  
   zend_file_handle zfd;
 
   zfd.type = ZEND_HANDLE_FILENAME;
@@ -171,7 +120,7 @@ ZEND_API int php_embed_execute(char *filename, char* key, char**params PTSRMLS_D
  * PHP module initialisation phase
  *
  */
-int php_embed_minit(const char* hardcoded_ini, PTSRMLS_D)
+int php_embed_minit(const char* hardcoded_ini PTSRMLS_DC)
 {
 #ifdef ZTS
 	void ***tsrm_ls = NULL;

@@ -1,8 +1,17 @@
 [![Stories in Ready](https://badge.waffle.io/ZenProjects/ZBX-PHP.png?label=ready&title=Ready)](https://waffle.io/ZenProjects/ZBX-PHP)
 # Zabbix PHP Loadable Module
 
-This directory contains a [Zabbix Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix
-Agent/Server/Proxy. 
+This directory contains a [Zabbix Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy. 
+
+Like [zlm-cython](https://github.com/vulogov/zlm-cython) this module is loading PHP interpreter inside Zabbix Server/Proxy/Agent address space.
+
+Is based on my precedente work https://www.zabbix.com/forum/showthread.php?t=8305 to add the possibility to call script inside the zabbix engine.
+
+it's at this epoc that i'have exchanged with Alexei Vladishev to add the possibility of loadable module...
+
+Now is done ! thank Alexei !
+
+With that module you can extend functionality of the Zabbix with PHP module at the infinite.
 
 # Prerequisite :
 
@@ -20,16 +29,17 @@ For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli 
 
 # How to Build the module
 
-Compile the zbx_php module with php (the importante option are "--with-php=..."):
+Compile the zbx_php module with php :
 
 ```
-# ./configure --prefix=/path/to/zabbix/install/dir \
-              --enable-server  \
-              --with-php=/path/to/php/install/dir
+# ./bootstrap.sh
+# ./configure --with-php=/path/to/php/install/dir 
+              --with-zabbix-include=/path/to/zabbix/include/dir 
+              --prefix=/path/to/zabbix/install/modules/dir
 # make
 # make install
 ```	      
-It should produce zbx_php.so.
+It should produce zbx_php.so in /path/to/zabbix/install/modules/dir.
 
 # Configure zbx_php with zabbix
 
@@ -53,7 +63,7 @@ Loadable modules are supported by Zabbix agent, server and proxy. Therefore, ite
 
 - **zbx_php.ping** - always returns '1'
 - **zbx_php.version** - returns the php version
-- **zbx_php.php[phpscript.php, param1, param2, ...]** - execute phpscript with params
+- **php[phpscript.php, param1, param2, ...]** - execute phpscript with params
 
 # configure module
 
@@ -65,8 +75,7 @@ for the moment containt only one parameter PHP_SCRIPT_PATH, that spcify where ph
 	PHP_SCRIPT_PATH=/usr/local/lib/zabbix/phpscripts
 ```
 
-
-# how to test module
+# How to test module
 
 To get php version with what the module are compiled :
 ```
@@ -80,9 +89,35 @@ To ping the module:
 1
 ```
 
-To execute a script (from PHP_SCRIPT_PATH directory) with the module:
+# How to code script
+
+Generale example are :
 ```
-# zabbix_get  -s 127.0.0.1 -k zbx_php.php[test.php,mon test a moi]
+<?php
+   return $myitemvalue;
+```
+
+***$myitemvalue*** can be numeric (integer or float/double), string or boulean.
+
+The module set the type returned correctly accordingly to the dectected type from php variable.
+
+The module set **max_execution_time** to **Timeout** zabbix configuration setting.
+
+the module set tree variable to the script:
+- **zabbix_timeout** - setted to **Timeout** zabbix configuration parametter, by default to 3
+- **zabbix_key** - normaly "php"
+- **zabbix_params** - array starting with php and followed by argument sended to the module (that are in [...])
+
+by **default** the php ini parametter are to :
+- **html_errors** = 0
+- **register_argc_argv** = 1
+- **implicit_flush** = 1
+- **output_buffering** = 0
+- **max_input_time** = -1
+
+To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with arguments "mon test a moi" by the module:
+```
+# zabbix_get  -s 127.0.0.1 -k php[test.php,mon test a moi]
 ....
 ```
 

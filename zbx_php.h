@@ -26,20 +26,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// PHP Embed Helper
+#include "php_embeded.h"
+
+// this macro are defined in php and in zabbix
+// to avoid warning in redefiniting it they are undef her befor 
+// zabbix header inclusion
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+#undef PACKAGE_NAME
+
 // autoconf include
 #include "zbx_php_config.h"
 
 // zabbix include
 #include "sysinc.h"
+#include "module.h"
 #include "common.h"
-#include "db.h"
+//#include "db.h"
 #include "cfg.h"
 #include "log.h"
-#include "sysinfo.h"
-#include "module.h"
-
-// PHP Embed Helper
-#include "php_embeded.h"
+//#include "sysinfo.h"
 
 #endif
 

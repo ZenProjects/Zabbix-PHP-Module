@@ -21,9 +21,9 @@
 #include "zbx_php.h"
 
 /* the variable keeps timeout setting for item processing */
-static int	item_timeout = 0;
-char        *php_path = NULL;
-extern char *CONFIG_LOAD_MODULE_PATH;
+static int	zbx_php_timeout = 0;
+char        	*php_path = NULL;
+extern char 	*CONFIG_LOAD_MODULE_PATH;
 
 int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result);
 int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result);
@@ -66,7 +66,7 @@ int	zbx_module_api_version()
  ******************************************************************************/
 void	zbx_module_item_timeout(int timeout)
 {
-	item_timeout = timeout;
+	zbx_php_timeout = timeout;
 }
 
 /******************************************************************************
@@ -175,14 +175,14 @@ int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 int zbx_set_return_value(AGENT_RESULT *result, zval *ret) 
 {
-    if (IS_LONG(ret)) {
-        SET_UI64_RESULT(result, Z_LVAL(ret));
-    } else if (IS_BOOL(ret)) {
-        SET_UI64_RESULT(result, Z_BVAL(ret));
-    } else if (IS_DOUBLE(ret)) {
-        SET_DBL_RESULT(result, Z_DVAL(ret));
-    } else if (IS_STRING(ret)) {
-        SET_STR_RESULT(result, strdup(Z_STRVAL(ret)));
+    if (ret->type == IS_LONG) {
+        SET_UI64_RESULT(result, Z_LVAL_P(ret));
+    } else if (ret->type == IS_BOOL) {
+        SET_UI64_RESULT(result, Z_BVAL_P(ret));
+    } else if (ret->type == IS_DOUBLE) {
+        SET_DBL_RESULT(result, Z_DVAL_P(ret));
+    } else if (ret->type == IS_STRING) {
+        SET_STR_RESULT(result, strdup(Z_STRVAL_P(ret)));
     } else {
         SET_MSG_RESULT(result, strdup("PHP returned unsupported value"));
         return SYSINFO_RET_FAIL;
@@ -199,8 +199,6 @@ int zbx_set_return_value(AGENT_RESULT *result, zval *ret)
  * Parameters: request - structure that contains item key and parameters      *
  *              request->key - item key without parameters                    *
  *              request->nparam - number of parameters                        *
- *              request->timeout - processing should not take longer than     *
- *                                 this number of seconds                     *
  *              request->params[N-1] - pointers to item key parameters        *
  *                                                                            *
  *             result - structure that will contain result                    *
@@ -245,6 +243,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	    return SYSINFO_RET_FAIL;
 	}
 
+	/*
         if (false)
 	{
 		zbx_snprintf(error,MAX_STRING_LEN-1,"this key for PHP check [%s] is not supported", item->key);
@@ -253,13 +252,14 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 		//return NOTSUPPORTED;
 	        return SYSINFO_RET_FAIL;
 	}
+	*/
 
-	zbx_snprintf(cmd, MAX_STRING_LEN-1, "Executing PHP script -%s- on -%s- with args:-%s-", request->key, item->host_name, params);
+	zbx_snprintf(cmd, MAX_STRING_LEN-1, "Executing PHP script -%s-", key);
 	zabbix_log( LOG_LEVEL_DEBUG, "%s", cmd );
 
 	////////////////////////////////////////
 	//// php request init - "RINIT" phase
-	if (php_embed_rinit(0, NULL PTSRMLS_CC)!=SUCCESS) 
+	if (php_embed_rinit(NULL )!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
 	  return SYSINFO_RET_OK;
@@ -270,12 +270,12 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	{
 
 	  // set php execution timeout with request->timeout
-	  new_timeout_strlen = zend_spprintf(&new_timeout_str, 0, "%ld", request->timeout);
+	  new_timeout_strlen = zend_spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
 
-	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, PHP_INI_USER, PHP_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
+	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
 	  {
 	        efree(new_timeout_str);
-		zbx_snprintf(error,MAX_STRING_LEN-1,"setting execution timeout to [%d] not succed", request->timeout);
+		zbx_snprintf(error,MAX_STRING_LEN-1,"setting execution timeout to [%d] not succed", zbx_php_timeout);
 		zabbix_log( LOG_LEVEL_ERR, "%s", error);
 		SET_STR_RESULT(result, strdup(error));
 	        ret=SYSINFO_RET_FAIL;
@@ -293,25 +293,25 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  MAKE_STD_ZVAL(php_key); // initialize an php variable to contains the request->key string
 	  MAKE_STD_ZVAL(php_timeout); // initialize an php variable to contains the request->timeout value
 
-	  ZVAL_LONG(php_key, request->timeout, 1);
+	  ZVAL_LONG(php_key, zbx_php_timeout);
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_timeout", php_timeout);
 
 	  ZVAL_STRING(php_key, request->key, 1);
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_key", php_key);
 
 	  for (i=0;i<request->nparam;i++) {
-	    add_next_index_string(return_value, get_rparam(request, i),1);
+	    add_next_index_string(php_params, get_rparam(request, i),1);
 	  }
-	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_args", php_args);
+	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_params", php_params);
 
 	  // re-initiliaze zval
 	  memset(&retval,0,sizeof(retval));
 
 	  // execute php script
 	  zabbix_log(LOG_LEVEL_DEBUG, "PHP script: \nSCRIPT BEGIN\n%s\nSCRIPT END",request->key);
-	  if (php_embed_eval_string(item->params, &retval, item->key TSRMLS_CC) == FAILURE) 
+	  if (php_embed_eval_string("return $zabbix_timeout;", &retval, request->key TSRMLS_CC) == FAILURE) 
 	  {
-	      zbx_snprintf(error,MAX_STRING_LEN-1,"External check [%s] is not supported, failed execution", item->key);
+	      zbx_snprintf(error,MAX_STRING_LEN-1,"External check [%s] is not supported, failed execution", request->key);
 	      zabbix_log( LOG_LEVEL_ERR, "%s", error);
 	      SET_STR_RESULT(result, strdup(error));
 	      zabbix_php_exception(EG(exception) TSRMLS_CC);
@@ -321,7 +321,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  else
 	  {
 	    // set result in function of the type of zval retval
-	    ret=zbx_set_return_value(result,retval);
+	    ret=zbx_set_return_value(result,&retval);
 
 	    // display the ret val value in string
 	    convert_to_string(&retval);
@@ -330,7 +330,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	    // free php ressource
 	    zval_dtor(&retval);
 	    zval_dtor(php_key);
-	    zval_dtor(php_args);
+	    zval_dtor(php_params);
 	    zval_dtor(php_timeout);
 	  }
 	} zend_catch {

@@ -1,20 +1,24 @@
 MODULE_NAME=@MODULE_NAME@
 MODULE_OBJS=$(MODULE_NAME).o php_embeded.o
-CFLAGS=@CFLAGS@ -fPIC -I@ZABBIX_INC_DIR@
+CFLAGS=-fPIC -I@ZABBIX_INC_DIR@ @CFLAGS@ 
 LDFLAGS=@LDFLAGS@ 
 LIBS=@LIBS@
+CC=gcc
 
-all: $(MODULE_NAME).la
-install: $(MODULE_NAME).la
+all: $(MODULE_NAME).so
+install: $(MODULE_NAME).so
+
+$(MODULE_NAME).o: $(MODULE_NAME).h php_embeded.h
+php_embeded.o: php_embeded.h
 
 .o.c: 
-	gcc -fPIC -c $@ $(CFLAGS)
+	gcc -fPIC -c $< $(CFLAGS)
 
-$(MODULE_NAME).la: $(MODULE_OBJS)
-	gcc -fPIC -shared $(LDFLAGS) $(LIBS) -o $(MODULE_NAME).so $@ 
+$(MODULE_NAME).so: $(MODULE_OBJS)
+	gcc -fPIC -shared $(LDFLAGS) $(LIBS) -o $(MODULE_NAME).so $(MODULE_OBJS)
 
 clean:
-	-rm -f $(MODULE_OBJS) $(MODULE_NAME).lo $(MODULE_NAME).la $(MODULE_NAME).slo 
+	-rm -f $(MODULE_OBJS) $(MODULE_NAME).lo $(MODULE_NAME).la $(MODULE_NAME).slo $(MODULE_NAME).so
 	-rm -rf .libs
 
 distclean: clean

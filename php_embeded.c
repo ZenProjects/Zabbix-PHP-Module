@@ -73,8 +73,7 @@
 *  https://www.amazon.fr/Advanced-PHP-Programming-George-Schlossnagle/dp/0672325616
 */
 
-#include "zbx_php.h"
-#include "common.h"
+#include "php_embeded.h"
 
 #if PHP_MAJOR_VERSION < 5 || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 5) 
     #error "Need PHP version >= 5.5 to compile this file"
@@ -91,10 +90,11 @@ ZEND_API int php_embed_eval_string(char *str, zval *retval_ptr, char *string_nam
 {
 	zval pv;
 	zend_op_array *new_op_array;
-	zend_op_array *original_active_op_array = EG(active_op_array);
-	zend_function_state *original_function_state_ptr = EG(function_state_ptr);
 	zend_uchar original_handle_op_arrays;
 	int retval;
+	/*
+	zend_op_array *original_active_op_array = EG(active_op_array);
+	zend_function_state *original_function_state_ptr = EG(function_state_ptr);
 
 	pv.value.str.len = strlen(str);
 	pv.value.str.val = estrndup(str, pv.value.str.len);
@@ -142,12 +142,17 @@ ZEND_API int php_embed_eval_string(char *str, zval *retval_ptr, char *string_nam
 		retval = FAILURE;
 	}
 	zval_dtor(&pv);
+	*/
 	return retval;
 }
 
 
-ZEND_API int php_embed_execute(char *filename, char* key, char**params)
+ZEND_API int php_embed_execute(char *filename, char* key, char**params PTSRMLS_DC)
 {
+#ifdef ZTS
+	void ***tsrm_ls;
+#endif
+  
   zend_file_handle zfd;
 
   zfd.type = ZEND_HANDLE_FILENAME;
@@ -166,9 +171,8 @@ ZEND_API int php_embed_execute(char *filename, char* key, char**params)
  * PHP module initialisation phase
  *
  */
-int php_embed_minit(const char* hardcoded_ini)
+int php_embed_minit(const char* hardcoded_ini, PTSRMLS_D)
 {
-	//zend_llist global_vars;
 #ifdef ZTS
 	void ***tsrm_ls = NULL;
 #endif
@@ -220,8 +224,6 @@ int php_embed_minit(const char* hardcoded_ini)
 	  return FAILURE;
   }
  
-  zend_llist_init(&global_vars, sizeof(char *), NULL, 0);
-
   /* Set some Embedded PHP defaults */
   SG(options) |= SAPI_OPTION_NO_CHDIR;
   return SUCCESS;

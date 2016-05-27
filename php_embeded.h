@@ -19,27 +19,36 @@
 */
 
 
-#ifndef ZABBIX_CHECKS_PHP_H
-#define ZABBIX_CHECKS_PHP_H
+#ifndef PHP_EMBEDED_H
+#define PHP_EMBEDED_H
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-// autoconf include
-#include "zbx_php_config.h"
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+#undef PACKAGE_NAME
 
-// zabbix include
-#include "sysinc.h"
-#include "common.h"
-#include "db.h"
-#include "cfg.h"
-#include "log.h"
-#include "sysinfo.h"
-#include "module.h"
+#include "zend_interfaces.h"
+#include "php_version.h"
 
-// PHP Embed Helper
-#include "php_embeded.h"
+#define HARDCODED_INI			\
+	"html_errors=0\n"		\
+	"register_argc_argv=1\n"	\
+	"implicit_flush=1\n"		\
+	"output_buffering=0\n"		\
+	"max_execution_time=0\n"	\
+	"max_input_time=-1\n"
+
+extern zend_class_entry *default_exception_ce;
+
+int 		php_embed_rinit(TSRMLS_D);
+ZEND_API void 	php_embed_excute(zval *exception TSRMLS_DC);
+ZEND_API int 	php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC);
+void 		php_embed_mshutdown(TSRMLS_D);
+void 		php_embed_rshutdown(TSRMLS_D);
 
 #endif
 

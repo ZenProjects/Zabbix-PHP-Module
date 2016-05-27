@@ -18,13 +18,12 @@
 **
 */
 
-#include "sysinc.h"
-#include "module.h"
-
 #include "zbx_php.h"
 
 /* the variable keeps timeout setting for item processing */
 static int	item_timeout = 0;
+char        *php_path = NULL;
+extern char *CONFIG_LOAD_MODULE_PATH;
 
 int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result);
 int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result);
@@ -38,6 +37,8 @@ static ZBX_METRIC keys[] =
 	{"php",				CF_HAVEPARAMS,	zbx_module_zbx_php_call,	""},
 	{NULL}
 };
+
+#define BUFSIZE 4096
 
 /******************************************************************************
  *                                                                            *
@@ -131,7 +132,7 @@ int	zbx_module_init()
 	////////////////////////////////////////
 	// php module init - "MINIT" phase
 	// initialization for zbx_php_call 
-	if (php_embed_minit(0, NULL PTSRMLS_CC)!=SUCCESS) 
+	if (php_embed_minit(HARDCODED_INI)!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
 	  return NOTSUPPORTED;
@@ -172,8 +173,8 @@ int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result)
 }
 
 
-int zbx_set_return_value(AGENT_RESULT *result, zval *ret) {
-    char *cstrret;
+int zbx_set_return_value(AGENT_RESULT *result, zval *ret) 
+{
     if (IS_LONG(ret)) {
         SET_UI64_RESULT(result, Z_LVAL(ret));
     } else if (IS_BOOL(ret)) {
@@ -286,7 +287,9 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  // prepare argument information to send to the script to execute
 	  //
 
+	  MAKE_STD_ZVAL(php_params);
           init_array(php_params); // initialize an php array to contains request->parms array
+
 	  MAKE_STD_ZVAL(php_key); // initialize an php variable to contains the request->key string
 	  MAKE_STD_ZVAL(php_timeout); // initialize an php variable to contains the request->timeout value
 

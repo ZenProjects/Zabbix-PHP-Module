@@ -74,10 +74,13 @@
 */
 
 #include "php_embeded.h"
+#include "ext/standard/php_standard.h"
+
 
 #if PHP_MAJOR_VERSION < 5 || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 5) 
     #error "Need PHP version >= 5.5 to compile this file"
 #endif
+
 
 /******************************************************************************
  *                                                                            *
@@ -123,6 +126,19 @@ int php_embed_execute(char *filename TSRMLS_DC)
     } zend_end_try();
     return ret == FAILURE;
 }
+
+
+/* {{{ arginfo ext/standard/dl.c */
+ZEND_BEGIN_ARG_INFO(arginfo_dl, 0)
+        ZEND_ARG_INFO(0, extension_filename)
+ZEND_END_ARG_INFO()
+/* }}} */
+
+static const zend_function_entry my_additional_functions[] = {
+        ZEND_FE(dl, arginfo_dl)
+        {NULL, NULL, NULL}
+};
+
 
 /***************************************************************************
  * php_embed_minit 
@@ -177,7 +193,7 @@ int php_embed_minit(const char* hardcoded_ini PTSRMLS_DC)
     memcpy(php_embed_module.ini_entries, hardcoded_ini, sizeof(hardcoded_ini));
   }
 
-  php_embed_module.additional_functions = additional_functions;
+  php_embed_module.additional_functions = my_additional_functions;
 
   if (php_embed_module.startup(&php_embed_module)==FAILURE) {
 	  return FAILURE;

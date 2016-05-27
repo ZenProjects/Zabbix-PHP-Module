@@ -105,7 +105,7 @@ int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result)
  * zabbix CONFIG_FILE directory.                                              *
  *                                                                            *
  ******************************************************************************/
-void load_php_env_config(void)  {
+int load_php_env_config(void)  {
     char conf_file[BUFSIZE];
     char base_path[BUFSIZE];
     static struct cfg_line cfg[] = {
@@ -115,9 +115,16 @@ void load_php_env_config(void)  {
     // CONFIG_FILE are populated a execution time with the default compiled path 
     // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
     // then get basepath and add zbx_php.cfg.
-    get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE);
+    if (get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE)!=SUCCESS)
+      return ZBX_MODULE_FAIL;
+
     zbx_snprintf(conf_file, BUFSIZE, "%s/zbx_php.cfg", base_path);
-    parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT); // use zabbix config parser
+    
+    // use zabbix config parser
+    if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)
+       return ZBX_MODULE_FAIL;
+
+    return ZBX_MODULE_OK;
 }
 
 /******************************************************************************
@@ -135,13 +142,16 @@ void load_php_env_config(void)  {
  ******************************************************************************/
 int	zbx_module_init()
 {
+	// load zbx_php.cfg config file
+	if (load_php_env_config()!=ZBX_MODULE_OK) return ZBX_MODULE_FAIL;
+
 	////////////////////////////////////////
 	// php module init - "MINIT" phase
 	// initialization for zbx_php_call 
 	if (php_embed_minit(HARDCODED_INI)!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
-	  return NOTSUPPORTED;
+	  return ZBX_MODULE_FAIL;
 	}
 
 	return ZBX_MODULE_OK;
@@ -250,6 +260,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	}
 
 	/*
+	 * TODO check script file path
         if (false)
 	{
 		zbx_snprintf(error,MAX_STRING_LEN-1,"this key for PHP check [%s] is not supported", item->key);

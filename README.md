@@ -106,3 +106,9 @@ the module set tree variable to the script:
 - zabbix_key - normaly "php"
 - zabbix_params - array starting with php and followed by argument sended to the module (that are in [...])
 
+by default the php ini parametter are to :
+- html_errors = 0
+- register_argc_argv = 1
+- implicit_flush = 1
+- output_buffering = 0
+- max_input_time = -1

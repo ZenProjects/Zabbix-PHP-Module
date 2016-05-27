@@ -1,5 +1,5 @@
 /*
-* PHP Embed SAPI Helper
+* Get Base Path of a file
 * Copyright (C) 2007-2016 Mathieu CARBONNEAUX
 *
 * This program is free software; you can redistribute it and/or modify
@@ -15,35 +15,26 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
 */
 
-
-#ifndef PHP_EMBEDED_H
-#define PHP_EMBEDED_H
+#ifndef GETPATHDIR_H 
+#define GETPATHDIR_H
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sapi/embed/php_embed.h"
-#include "zend_interfaces.h"
-#include "php_version.h"
-#include "zend.h"
-#include "zend_ini.h"
-#include "zend_API.h"
-#include "TSRM.h"
+#define FAILURE_NULL_ARGUMENT 1
+#define FAILURE_INVALID_ARGUMENTS 2
+#define FAILURE_INVALID_PATH 3
+#define FAILURE_BUFFER_TOO_SMALL 4
+#define FAILURE_API_CALL 5
+#define SUCCESS 0
+extern int get_base_path_from_pathname( const char*  const p_pathname,
+					size_t             pathname_size,
+					char* const        p_basepath,
+					size_t             basepath_size );
 
- int 		php_embed_rinit(TSRMLS_D);
-void 		php_embed_excute(zval *exception TSRMLS_DC);
-int 		php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC);
-void 		php_embed_mshutdown(TSRMLS_D);
-void 		php_embed_rshutdown(TSRMLS_D);
-
-BEGIN_EXTERN_C()
-extern char HARDCODED_INI[];
-extern const zend_function_entry additional_functions[];
-END_EXTERN_C()
 
 #endif
 

@@ -49,5 +49,7 @@
 #include "log.h"
 //#include "sysinfo.h"
 
+#include "GetPathDir.h"
+
 #endif
 

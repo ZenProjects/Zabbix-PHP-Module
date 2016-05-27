@@ -101,16 +101,22 @@ int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result)
  *                                                                            *
  * Function: load_php_env_config                                              *
  *                                                                            *
- * Purpose: load php configuration file                                       *
+ * Purpose: load ZBX-PHP module configuration file from zbx_php.cfg in        *
+ * zabbix CONFIG_FILE directory.                                              *
  *                                                                            *
  ******************************************************************************/
 void load_php_env_config(void)  {
     char conf_file[BUFSIZE];
+    char base_path[BUFSIZE];
     static struct cfg_line cfg[] = {
-	    { "PHPPATH", &php_path, TYPE_STRING, PARM_MAND, 0, 0 },
+	    { "PHP_SCRIPT_PATH", &php_path, TYPE_STRING, PARM_MAND, 0, 0 },
 	    { NULL },
     };
-    zbx_snprintf(conf_file, BUFSIZE, "%s/php.cfg", CONFIG_LOAD_MODULE_PATH);
+    // CONFIG_FILE are populated a execution time with the default compiled path 
+    // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
+    // then get basepath and add zbx_php.cfg.
+    get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE);
+    zbx_snprintf(conf_file, BUFSIZE, "%s/zbx_php.cfg", base_path);
     parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT); // use zabbix config parser
 }
 

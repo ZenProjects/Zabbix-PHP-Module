@@ -1,5 +1,5 @@
 MODULE_NAME=@MODULE_NAME@
-MODULE_OBJS=$(MODULE_NAME).o php_embeded.o
+MODULE_OBJS=$(MODULE_NAME).o php_embeded.o GetPathDir.o
 CFLAGS=-fPIC -I@ZABBIX_INC_DIR@ @CFLAGS@ 
 LDFLAGS=@LDFLAGS@ 
 LIBS=@LIBS@
@@ -8,7 +8,7 @@ CC=gcc
 all: $(MODULE_NAME).so
 install: $(MODULE_NAME).so
 
-$(MODULE_NAME).o: $(MODULE_NAME).h php_embeded.h
+$(MODULE_NAME).o: $(MODULE_NAME).h php_embeded.h GetPathDir.h
 php_embeded.o: php_embeded.h
 
 .o.c: 

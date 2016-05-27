@@ -66,8 +66,7 @@ for the moment containt only one parameter PHP_SCRIPT_PATH, that spcify where ph
 	PHP_SCRIPT_PATH=/usr/local/lib/zabbix/phpscripts
 ```
 
-
-# how to test module
+# How to test module
 
 To get php version with what the module are compiled :
 ```
@@ -79,12 +78,6 @@ To ping the module:
 ```
 # zabbix_get  -s 127.0.0.1 -k zbx_php.ping
 1
-```
-
-To execute a script (from PHP_SCRIPT_PATH directory) with the module:
-```
-# zabbix_get  -s 127.0.0.1 -k zbx_php.php[test.php,mon test a moi]
-....
 ```
 
 # How to code script
@@ -102,13 +95,20 @@ The module set the type returned correctly accordingly to the dectected type fro
 The module set **max_execution_time** to **Timeout** zabbix configuration setting.
 
 the module set tree variable to the script:
-- zabbix_timeout - setted to **Timeout** zabbix configuration parametter, by default to 3
-- zabbix_key - normaly "php"
-- zabbix_params - array starting with php and followed by argument sended to the module (that are in [...])
+- **zabbix_timeout** - setted to **Timeout** zabbix configuration parametter, by default to 3
+- **zabbix_key** - normaly "php"
+- **zabbix_params** - array starting with php and followed by argument sended to the module (that are in [...])
 
-by default the php ini parametter are to :
-- html_errors = 0
-- register_argc_argv = 1
-- implicit_flush = 1
-- output_buffering = 0
-- max_input_time = -1
+by **default** the php ini parametter are to :
+- **html_errors** = 0
+- **register_argc_argv** = 1
+- **implicit_flush** = 1
+- **output_buffering** = 0
+- **max_input_time** = -1
+
+To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with arguments "mon test a moi" by the module:
+```
+# zabbix_get  -s 127.0.0.1 -k zbx_php.php[test.php,mon test a moi]
+....
+```
+

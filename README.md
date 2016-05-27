@@ -20,7 +20,7 @@ For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli 
 
 # How to Build the module
 
-Compile the zbx_php module with php (the importante option are "--with-php=..."):
+Compile the zbx_php module with php :
 
 ```
 # ./bootstrap.sh
@@ -30,7 +30,7 @@ Compile the zbx_php module with php (the importante option are "--with-php=...")
 # make
 # make install
 ```	      
-It should produce zbx_php.so.
+It should produce zbx_php.so in /path/to/zabbix/install/modules/dir.
 
 # Configure zbx_php with zabbix
 

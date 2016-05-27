@@ -23,9 +23,10 @@ For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli 
 Compile the zbx_php module with php (the importante option are "--with-php=..."):
 
 ```
-# ./configure --prefix=/path/to/zabbix/install/dir \
-              --enable-server  \
-              --with-php=/path/to/php/install/dir
+# ./bootstrap.sh
+# ./configure --with-php=/path/to/php/install/dir 
+              --with-zabbix-include=/path/to/zabbix/include/dir 
+              --prefix=/path/to/zabbix/install/modules/dir
 # make
 # make install
 ```	      

@@ -1,16 +1,16 @@
-MODULE_NAME=zbx-php
+MODULE_NAME=@MODULE_NAME@
 MODULE_OBJS=$(MODULE_NAME).o php_embeded.o
-CFLAGS=@CFLAGS@
-LDFLAGS=@LDFALGS@
+CFLAGS=@CFLAGS@ -fPIC -I@ZABBIX_INC_DIR@
+LDFLAGS=@LDFLAGS@ 
 LIBS=@LIBS@
 
 all: $(MODULE_NAME).la
+install: $(MODULE_NAME).la
 
-$(MODULE_NAME).la: $(MODULE_NAME).c
+.o.c: 
 	gcc -fPIC -c $@ $(CFLAGS)
 
-install: $(MODULE_NAME).la
-$(MODULE_NAME).so: $(MODULE_OBJS)
+$(MODULE_NAME).la: $(MODULE_OBJS)
 	gcc -fPIC -shared $(LDFLAGS) $(LIBS) -o $(MODULE_NAME).so $@ 
 
 clean:
@@ -19,4 +19,4 @@ clean:
 
 distclean: clean
 	-rm -f config.log config.status Makefile
-	-rm -rf autom4te.cache 
+	-rm -rf autom4te.cache configure zbx_php_config.h

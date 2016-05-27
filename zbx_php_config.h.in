@@ -1,0 +1,4 @@
+
+/* Define to 1 if PHP should be enabled. */
+#undef HAVE_PHP
+

@@ -2,6 +2,9 @@ config.log
 config.status 
 Makefile
 autom4te.cache
+zbx_php_config.h 
+configure
+
 .libs
 *.o
 *.so

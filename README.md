@@ -91,7 +91,7 @@ To ping the module:
 
 # How to code script
 
-Generale examplle are :
+Generale example are :
 ```
 <?php
    return $myitemvalue;

@@ -87,3 +87,22 @@ To execute a script (from PHP_SCRIPT_PATH directory) with the module:
 ....
 ```
 
+# How to code script
+
+Generale examplle are :
+```
+<?php
+   return $myitemvalue;
+```
+
+***$myitemvalue*** can be numeric (integer or float/double), string or boulean.
+
+The module set the type returned correctly accordingly to the dectected type from php variable.
+
+The module set **max_execution_time** to **Timeout** zabbix configuration setting.
+
+the module set tree variable to the script:
+- zabbix_timeout - setted to **Timeout** zabbix configuration parametter, by default to 3
+- zabbix_key - normaly "php"
+- zabbix_params - array starting with php and followed by argument sended to the module (that are in [...])
+

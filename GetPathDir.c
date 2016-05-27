@@ -41,7 +41,7 @@ int get_base_path_from_pathname( const char*  const p_pathname,
   if( pathname_size < 1 || basepath_size < 1 ) { return FAILURE_INVALID_ARGUMENTS; }
 
   // Returns a pointer to the last occurrence of \ in p_pathname or NULL if it is not found
-  p_end_of_path = strrchr( p_pathname, '\\' );
+  p_end_of_path = strrchr( p_pathname, '/' );
   if( p_end_of_path == NULL )
   {
     // There is no path part
@@ -56,7 +56,7 @@ int get_base_path_from_pathname( const char*  const p_pathname,
     if( ( path_length + 1 ) > basepath_size ) { return FAILURE_BUFFER_TOO_SMALL; }
 
     // Copy the base path into the out variable
-    if( strncpy( p_basepath, p_pathname, path_length ) != 0 ) { return FAILURE_API_CALL; }
+    strncpy(p_basepath, p_pathname, path_length);
     p_basepath[path_length] = '\0';
   }
 

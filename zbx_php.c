@@ -21,9 +21,8 @@
 #include "zbx_php.h"
 
 /* the variable keeps timeout setting for item processing */
-static int	zbx_php_timeout = 0;
+int		zbx_php_timeout = 0;
 char        	*php_path = NULL;
-extern char 	*CONFIG_LOAD_MODULE_PATH;
 
 int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result);
 int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result);
@@ -108,6 +107,7 @@ int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result)
 int load_php_env_config(void)  {
     char conf_file[BUFSIZE];
     char base_path[BUFSIZE];
+    int ret=0;
     static struct cfg_line cfg[] = {
 	    { "PHP_SCRIPT_PATH", &php_path, TYPE_STRING, PARM_MAND, 0, 0 },
 	    { NULL },
@@ -115,15 +115,23 @@ int load_php_env_config(void)  {
     // CONFIG_FILE are populated a execution time with the default compiled path 
     // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
     // then get basepath and add zbx_php.cfg.
-    if (get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE)!=SUCCESS)
+    if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE))!=SUCCESS)
+    {
+      zabbix_log( LOG_LEVEL_ERR, "load_php_env_config get base path error : %d!!!!", ret);
       return ZBX_MODULE_FAIL;
+    }
 
-    zbx_snprintf(conf_file, BUFSIZE, "%s/zbx_php.cfg", base_path);
+    zbx_snprintf(conf_file, BUFSIZE, "%szbx_php.conf", base_path);
+    zabbix_log( LOG_LEVEL_INFORMATION, "Module Config lodaded from %s", conf_file);
     
     // use zabbix config parser
     if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)
+    {
+       zabbix_log( LOG_LEVEL_ERR, "load_php_env_config parse file error!!!!");
        return ZBX_MODULE_FAIL;
+    }
 
+    zabbix_log( LOG_LEVEL_INFORMATION, "Module PHP_SCRIPT_PATH set to %s", php_path);
     return ZBX_MODULE_OK;
 }
 
@@ -142,13 +150,19 @@ int load_php_env_config(void)  {
  ******************************************************************************/
 int	zbx_module_init()
 {
+	TSRMLS_FETCH();
+
 	// load zbx_php.cfg config file
-	if (load_php_env_config()!=ZBX_MODULE_OK) return ZBX_MODULE_FAIL;
+	if (load_php_env_config()!=ZBX_MODULE_OK) 
+	{
+	 zabbix_log( LOG_LEVEL_ERR, "load_php_env_config error!!!!");
+	 return ZBX_MODULE_FAIL;
+	}
 
 	////////////////////////////////////////
 	// php module init - "MINIT" phase
 	// initialization for zbx_php_call 
-	if (php_embed_minit(MY_HARDCODED_INI)!=SUCCESS) 
+	if (php_embed_minit(MY_HARDCODED_INI TSRMLS_CC)!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
 	  return ZBX_MODULE_FAIL;
@@ -230,9 +244,7 @@ int zbx_set_return_value(AGENT_RESULT *result, zval *ret)
  ******************************************************************************/
 int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 {
-#ifdef ZTS
-	void ***tsrm_ls = NULL;
-#endif
+	TSRMLS_FETCH();
 	char    php_script_filename[BUFSIZE];
 	char    error[MAX_STRING_LEN];
 	char    cmd[MAX_STRING_LEN];
@@ -260,7 +272,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	//////////////////////////////////////////////////
 	//// check php file script existance in php_path
-        zbx_snprintf(php_script_filename, BUFSIZE, "%s/%s", php_path,request->key);
+        zbx_snprintf(php_script_filename, BUFSIZE, "%s/%s", php_path,get_rparam(request, 0));
 	if( access(php_script_filename, F_OK ) == -1 ) {
 	   zbx_snprintf(cmd, MAX_STRING_LEN-1, "PHP Script file '%s' not found in script folder '%s'.", request->key, php_path);
 	   SET_MSG_RESULT(result, strdup(cmd));
@@ -268,12 +280,12 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	}
 
 	zbx_snprintf(cmd, MAX_STRING_LEN-1, "Executing PHP script -%s-", php_script_filename);
-	zabbix_log( LOG_LEVEL_DEBUG, "%s", cmd );
+	zabbix_log( LOG_LEVEL_INFORMATION, "%s", cmd );
 
 	////////////////////////////////////////
 	//// php request init - "RINIT" phase
 	////////////////////////////////////////
-	if (php_embed_rinit(NULL )!=SUCCESS) 
+	if (php_embed_rinit(TSRMLS_C)!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
 	  return SYSINFO_RET_OK;
@@ -326,7 +338,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  //////////////////////////////
 	  // execute php script
 	  //////////////////////////////
-	  if (php_embed_execute(php_script_filename TSRMLS_CC) == FAILURE) 
+	  if ((retval=php_embed_execute(php_script_filename TSRMLS_CC)) == NULL) 
 	  {
 	      zbx_snprintf(error,MAX_STRING_LEN-1,"External check [%s] is not supported, failed execution", request->key);
 	      zabbix_log( LOG_LEVEL_ERR, "%s", error);

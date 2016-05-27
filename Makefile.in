@@ -6,7 +6,10 @@ LIBS=@LIBS@
 CC=gcc
 
 all: $(MODULE_NAME).so
+
 install: $(MODULE_NAME).so
+	-mkdir -p @prefix@
+	-cp -f $(MODULE_NAME).so @prefix@
 
 $(MODULE_NAME).o: $(MODULE_NAME).h php_embeded.h GetPathDir.h
 php_embeded.o: php_embeded.h

@@ -37,7 +37,7 @@
 
 int 		php_embed_rinit(TSRMLS_D);
 int 		php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC);
-int 		php_embed_execute(char *filename TSRMLS_DC);
+zval * 		php_embed_execute(char *filename TSRMLS_DC);
 void 		php_embed_mshutdown(TSRMLS_D);
 void 		php_embed_rshutdown(TSRMLS_D);
 

@@ -52,5 +52,7 @@
 
 #include "GetPathDir.h"
 
+extern char 	*CONFIG_LOAD_MODULE_PATH;
+
 #endif
 

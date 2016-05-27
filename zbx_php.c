@@ -148,7 +148,7 @@ int	zbx_module_init()
 	////////////////////////////////////////
 	// php module init - "MINIT" phase
 	// initialization for zbx_php_call 
-	if (php_embed_minit(HARDCODED_INI)!=SUCCESS) 
+	if (php_embed_minit(MY_HARDCODED_INI)!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
 	  return ZBX_MODULE_FAIL;
@@ -250,7 +250,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	zabbix_log( LOG_LEVEL_DEBUG, "In get_value_php([%s])",request->key);
 
 	// zabbix init result
-	init_result(result);
+	//init_result(result);
 
 	// check the number of argument
 	if ((request->nparam < 1) || (strlen(get_rparam(request, 0)) == 0))   {
@@ -285,7 +285,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	  //////////////////////////////////////////////////////
 	  // set php execution timeout with request->timeout
-	  new_timeout_strlen = zend_spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
+	  new_timeout_strlen = spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
 
 	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
 	  {
@@ -303,7 +303,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  //////////////////////////////////////////////////////////////////
 
 	  MAKE_STD_ZVAL(php_params);
-          init_array(php_params); // initialize an php array to contains request->parms array
+          array_init(php_params); // initialize an php array to contains request->parms array
 
 	  MAKE_STD_ZVAL(php_key); // initialize an php variable to contains the request->key string
 	  MAKE_STD_ZVAL(php_timeout); // initialize an php variable to contains the request->timeout value

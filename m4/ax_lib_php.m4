@@ -162,6 +162,7 @@ AC_HELP_STRING([--with-php@<:@=ARG@:>@], [use PHP Embeded library @<:@default=no
         fi
     fi
 
+    AC_SUBST([PHP_PREFIX])
     AC_SUBST([PHP_VERSION])
     AC_SUBST([PHP_CFLAGS])
     AC_SUBST([PHP_LDFLAGS])

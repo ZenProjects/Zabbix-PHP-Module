@@ -33,6 +33,7 @@
 #include "zend_ini.h"
 #include "zend_API.h"
 #include "TSRM.h"
+#include "zend_exceptions.h"
 
 int 		php_embed_rinit(TSRMLS_D);
 int 		php_embed_eval_string(char *str, zval *retval_ptr, char *string_name TSRMLS_DC);
@@ -40,10 +41,13 @@ int 		php_embed_execute(char *filename TSRMLS_DC);
 void 		php_embed_mshutdown(TSRMLS_D);
 void 		php_embed_rshutdown(TSRMLS_D);
 
-BEGIN_EXTERN_C()
-extern char HARDCODED_INI[];
-extern const zend_function_entry additional_functions[];
-END_EXTERN_C()
+#define  MY_HARDCODED_INI \
+        "html_errors=0\n"  \
+        "register_argc_argv=1\n" \
+        "implicit_flush=1\n" \
+        "output_buffering=0\n" \
+        "max_execution_time=0\n" \
+        "max_input_time=-1\n\0"
 
 #endif
 

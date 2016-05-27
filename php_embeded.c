@@ -83,7 +83,7 @@
  *                                                                            *
  * Function: php_embed_eval_string                                            *
  *                                                                            *
- * Purpose: eval php script string transmit in str.                           *
+ * Purpose: eval php script string transmit in code.                           *
  *                                                                            *
  ******************************************************************************/
 int php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS_DC)
@@ -100,18 +100,28 @@ int php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS
 }
 
 
-int php_embed_execute(char *filename, char* key, char**params TSRMLS_DC)
+/******************************************************************************
+ *                                                                            *
+ * Function: php_embed_execute                                                *
+ *                                                                            *
+ * Purpose: execute filename script.                                          *
+ *                                                                            *
+ ******************************************************************************/
+int php_embed_execute(char *filename TSRMLS_DC)
 {
-  zend_file_handle zfd;
+    int ret = 0;
 
-  zfd.type = ZEND_HANDLE_FILENAME;
-  zfd.filename = filename;
-  zfd.handle.fp = NULL;
-  zfd.free_filename = 0;
-  zfd.opened_path = NULL;
-  zend_try {
-           php_execute_script(&zfd TSRMLS_CC);
-  } zend_end_try();
+    zend_file_handle zfd;
+
+    zfd.type = ZEND_HANDLE_FILENAME;
+    zfd.filename = filename;
+    zfd.handle.fp = NULL;
+    zfd.free_filename = 0;
+    zfd.opened_path = NULL;
+    zend_try {
+	 ret = php_execute_script(&zfd TSRMLS_CC);
+    } zend_end_try();
+    return ret == FAILURE;
 }
 
 /***************************************************************************

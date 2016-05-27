@@ -231,51 +231,48 @@ int zbx_set_return_value(AGENT_RESULT *result, zval *ret)
 int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 {
 #ifdef ZTS
-	void ***tsrm_ls;
+	void ***tsrm_ls = NULL;
 #endif
-	char    scriptname[MAX_STRING_LEN];
-	char    key[MAX_STRING_LEN];
-	char    params[MAX_STRING_LEN];
+	char    php_script_filename[BUFSIZE];
 	char    error[MAX_STRING_LEN];
 	char    cmd[MAX_STRING_LEN];
 	long new_timeout;
 	char *new_timeout_str;
 	int new_timeout_strlen;
-	char    *p,*p2;
 	int     i;
 	zval *php_key; // string sended to the php script, containing request->key 
 	zval *php_params; // array sended to the php script, containing request->params
 	zval *php_timeout; // long sended to the php script, containing request->timeout
-	zval retval;
+	zval *retval;
 
 	int     ret = SYSINFO_RET_OK;
 
 	zabbix_log( LOG_LEVEL_DEBUG, "In get_value_php([%s])",request->key);
 
-	//init_result(result);
+	// zabbix init result
+	init_result(result);
 
+	// check the number of argument
 	if ((request->nparam < 1) || (strlen(get_rparam(request, 0)) == 0))   {
 	    SET_MSG_RESULT(result, strdup("Invalid number of parameters."));
 	    return SYSINFO_RET_FAIL;
 	}
 
-	/*
-	 * TODO check script file path
-        if (false)
-	{
-		zbx_snprintf(error,MAX_STRING_LEN-1,"this key for PHP check [%s] is not supported", item->key);
-		zabbix_log( LOG_LEVEL_ERR, "%s", error);
-		SET_STR_RESULT(result, strdup(error));
-		//return NOTSUPPORTED;
-	        return SYSINFO_RET_FAIL;
+	//////////////////////////////////////////////////
+	//// check php file script existance in php_path
+        zbx_snprintf(php_script_filename, BUFSIZE, "%s/%s", php_path,request->key);
+	if( access(php_script_filename, F_OK ) == -1 ) {
+	   zbx_snprintf(cmd, MAX_STRING_LEN-1, "PHP Script file '%s' not found in script folder '%s'.", request->key, php_path);
+	   SET_MSG_RESULT(result, strdup(cmd));
+	   return SYSINFO_RET_FAIL;
 	}
-	*/
 
-	zbx_snprintf(cmd, MAX_STRING_LEN-1, "Executing PHP script -%s-", key);
+	zbx_snprintf(cmd, MAX_STRING_LEN-1, "Executing PHP script -%s-", php_script_filename);
 	zabbix_log( LOG_LEVEL_DEBUG, "%s", cmd );
 
 	////////////////////////////////////////
 	//// php request init - "RINIT" phase
+	////////////////////////////////////////
 	if (php_embed_rinit(NULL )!=SUCCESS) 
 	{
 	  zabbix_log( LOG_LEVEL_ERR, "php_embed_minit error!!!!");
@@ -286,6 +283,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	zend_first_try 
 	{
 
+	  //////////////////////////////////////////////////////
 	  // set php execution timeout with request->timeout
 	  new_timeout_strlen = zend_spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
 
@@ -300,9 +298,9 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  }
 	  efree(new_timeout_str);
 
-	  // 
+	  //////////////////////////////////////////////////////////////////
 	  // prepare argument information to send to the script to execute
-	  //
+	  //////////////////////////////////////////////////////////////////
 
 	  MAKE_STD_ZVAL(php_params);
           init_array(php_params); // initialize an php array to contains request->parms array
@@ -322,40 +320,42 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_params", php_params);
 
 	  // re-initiliaze zval
-	  memset(&retval,0,sizeof(retval));
+	  //memset(&retval,0,sizeof(retval));
+	  ALLOC_INIT_ZVAL(retval);
 
+	  //////////////////////////////
 	  // execute php script
-	  zabbix_log(LOG_LEVEL_DEBUG, "PHP script: \nSCRIPT BEGIN\n%s\nSCRIPT END",request->key);
-	  if (php_embed_eval_string("return $zabbix_timeout;", &retval, request->key TSRMLS_CC) == FAILURE) 
+	  //////////////////////////////
+	  if (php_embed_execute(php_script_filename TSRMLS_CC) == FAILURE) 
 	  {
 	      zbx_snprintf(error,MAX_STRING_LEN-1,"External check [%s] is not supported, failed execution", request->key);
 	      zabbix_log( LOG_LEVEL_ERR, "%s", error);
 	      SET_STR_RESULT(result, strdup(error));
-	      zabbix_php_exception(EG(exception) TSRMLS_CC);
-	      ret=NOTSUPPORTED;
+	      ret=SYSINFO_RET_FAIL;
 	      zend_bailout();
 	  }
 	  else
 	  {
 	    // set result in function of the type of zval retval
-	    ret=zbx_set_return_value(result,&retval);
+	    ret=zbx_set_return_value(result,retval);
 
 	    // display the ret val value in string
-	    convert_to_string(&retval);
-	    zabbix_log(LOG_LEVEL_DEBUG, "PHP script code returned: -%s-", Z_STRVAL(retval));
+	    convert_to_string(retval);
+	    zabbix_log(LOG_LEVEL_DEBUG, "PHP script code returned: -%s-", Z_STRVAL_P(retval));
 
 	    // free php ressource
-	    zval_dtor(&retval);
+	    zval_dtor(retval);
 	    zval_dtor(php_key);
 	    zval_dtor(php_params);
 	    zval_dtor(php_timeout);
 	  }
 	} zend_catch {
-	   zabbix_php_exception(EG(exception) TSRMLS_CC);
-	   ret=NOTSUPPORTED;
+	   ret=SYSINFO_RET_FAIL;
 	} zend_end_try(); 
 
+	///////////////////////////////////////////////
 	// php request shutdown - "RSHUTDOWN" phase
+	///////////////////////////////////////////////
 	php_embed_rshutdown(TSRMLS_C);
 
 	return ret;

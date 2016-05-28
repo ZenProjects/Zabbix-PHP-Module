@@ -128,35 +128,35 @@ To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with argum
 # Some idea that can do with this module
 
 - Monitoring ldap directory in ldap:
-	https://docs.oracle.com/cd/E19476-01/821-0506/monitoring-using-cn-monitor.html
-	http://php.net/manual/fr/book.ldap.php
+https://docs.oracle.com/cd/E19476-01/821-0506/monitoring-using-cn-monitor.html
+http://php.net/manual/fr/book.ldap.php
 - Monitoring mysql with sql requesting:
-	https://www.vividcortex.com/blog/2014/11/03/mysql-query-performance-statistics-in-the-performance-schema/
-	http://php.net/manual/fr/ref.pdo-mysql.php
-	https://dev.mysql.com/doc/refman/5.6/en/performance-schema.html
-	https://blog.serverdensity.com/how-to-monitor-mysql/ -> 
+https://www.vividcortex.com/blog/2014/11/03/mysql-query-performance-statistics-in-the-performance-schema/
+http://php.net/manual/fr/ref.pdo-mysql.php
+https://dev.mysql.com/doc/refman/5.6/en/performance-schema.html
+https://blog.serverdensity.com/how-to-monitor-mysql/ 
 - SNMP equipement that need data manipulation before sending result to zabbix
-	http://php.net/manual/fr/book.snmp.php
+http://php.net/manual/fr/book.snmp.php
 - With ssh2 you can call script on other machine in php
-	http://php.net/manual/fr/book.ssh2.php
+http://php.net/manual/fr/book.ssh2.php
 - With rpc protocol (soap/rest/xml-rpc/trait...) you can get remote information 
-	http://php.net/manual/fr/book.soap.php
-	http://php.net/manual/fr/book.xmlrpc.php
+http://php.net/manual/fr/book.soap.php
+http://php.net/manual/fr/book.xmlrpc.php
 - With sockets you can call many network service to retreive information
-	http://php.net/manual/fr/book.sockets.php
+http://php.net/manual/fr/book.sockets.php
 - You can check dns
-	http://php.net/manual/fr/function.dns-get-record.php
-	https://netdns2.com/documentation/examples/
+http://php.net/manual/fr/function.dns-get-record.php
+https://netdns2.com/documentation/examples/
 - With curl you can use many protocol to retrieve information
-	http://php.net/manual/fr/book.curl.php
+http://php.net/manual/fr/book.curl.php
 - Many nosql have there statistics acessible with her protocol like memcache
-	http://php.net/manual/fr/memcached.getstats.php
+http://php.net/manual/fr/memcached.getstats.php
 - Linux kernel monitoring in parsing /proc
-	https://www.kernel.org/doc/Documentation/filesystems/proc.txt
-	http://blog.tsunanet.net/2011/03/out-of-socket-memory.html
-	http://kaivanov.blogspot.fr/2013/01/troubleshooting-out-of-socket-memory.html
+https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+http://blog.tsunanet.net/2011/03/out-of-socket-memory.html
+http://kaivanov.blogspot.fr/2013/01/troubleshooting-out-of-socket-memory.html
 - Monitorer les disques
- 	http://php.net/manual/fr/function.disk-total-space.php
-	http://php.net/manual/fr/function.disk-free-space.php
+http://php.net/manual/fr/function.disk-total-space.php
+http://php.net/manual/fr/function.disk-free-space.php
 
 

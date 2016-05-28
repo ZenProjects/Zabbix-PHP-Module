@@ -25,11 +25,11 @@ How to compile it (the important option are "--enable-embed") :
 # make
 # make install
 ```
-For example to have libphp5.so embeded library with snmp, ldap, curl and mysqli shared module.
+For example to have **libphp5.so** embeded library with snmp, ldap, curl and mysqli shared module.
 
 # How to Build the module
 
-Compile the zbx_php module with php :
+Compile the **zbx_php** module with php :
 
 ```
 # ./bootstrap.sh
@@ -39,27 +39,27 @@ Compile the zbx_php module with php :
 # make
 # make install
 ```	      
-It should produce zbx_php.so in /path/to/zabbix/install/modules/dir.
+It should produce **zbx_php.so** in **/path/to/zabbix/install/modules/dir**.
 
-# Configure zbx_php with zabbix
+# Configure **zbx_php** with zabbix
 
 Zabbix agent, server and proxy support two parameters to deal with modules:
 
-- **LoadModulePath** – full path to the location of loadable modules, where to copy zbx_php.so
-- **LoadModule** – module(s) to load at startup. The modules must be located in a directory specified by LoadModulePath. It is allowed to include multiple LoadModule parameters.
+- **LoadModulePath** – full path to the location of loadable modules, where to copy **zbx_php.so**
+- **LoadModule** – module(s) to load at startup. The modules must be located in a directory specified by **LoadModulePath**. It is allowed to include multiple **LoadModule** parameters.
 
 For example, to extend Zabbix agent we could add the following parameters:
 
 ```
-	LoadModulePath=/usr/local/lib/zabbix/agent/
+	LoadModulePath=/path/to/zabbix/install/modules/dir
 	LoadModule=zbx_php.so
 ```
 
-Upon agent startup it will load the zbx_php.so modules from the /usr/local/lib/zabbix/agent directory. It will fail if a module is missing, in case of bad permissions or if a shared library is not a Zabbix module.
+Upon agent startup it will load the **zbx_php.so** modules from the **/path/to/zabbix/install/modules/dir** directory. It will fail if a module is missing, in case of bad permissions or if a shared library is not a Zabbix module.
 
 # Zabbix Frontend configuration
 
-Loadable modules are supported by Zabbix agent, server and proxy. Therefore, item type in Zabbix frontend depends on where the module is loaded. If the module is loaded into the agent, then the item type should be “Zabbix agent” or “Zabbix agent (active)”. If the module is loaded into server or proxy, then the item type should be “Simple check”.
+Loadable modules are supported by Zabbix **agent**, **server** and **proxy**. Therefore, item type in Zabbix frontend depends on where the module is loaded. If the module is loaded into the agent, then the item type should be **“Zabbix agent”** or **“Zabbix agent (active)”**. If the module is loaded into **server** or **proxy**, then the item type should be **“Simple check”**.
 
 - **zbx_php.ping** - always returns '1'
 - **zbx_php.version** - returns the php version
@@ -69,7 +69,7 @@ Loadable modules are supported by Zabbix agent, server and proxy. Therefore, ite
 
 The module as config file in the same place of the Zabbix Agentd/Server/proxy are, named **zbx_php.conf**.
 
-for the moment containt only one parameter PHP_SCRIPT_PATH, that specify where php script are searched to execute:
+for the moment containt only one parameter **PHP_SCRIPT_PATH**, that specify where php script are searched to execute:
 
 ```
 	PHP_SCRIPT_PATH=/usr/local/lib/zabbix/phpscripts

@@ -135,6 +135,8 @@ You can find sample script in **"scripts_examples"** folder of the project.
 
 https://docs.oracle.com/cd/E19476-01/821-0506/monitoring-using-cn-monitor.html
 
+http://www.openldap.org/devel/admin/monitoringslapd.html
+
 http://php.net/manual/en/book.ldap.php
 
 - Monitoring sql database with sql requesting:

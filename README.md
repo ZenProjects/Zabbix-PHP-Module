@@ -15,7 +15,7 @@ With that module you can extend functionality of the Zabbix with PHP module at t
 
 # Prerequisite :
 
-The **PHP Embed SAPI - libphp.so** :
+The **PHP Embed SAPI - libphp5.so** :
 
 How to compile it (the important option are "--enable-embed") :
 ```

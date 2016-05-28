@@ -41,7 +41,7 @@ Compile the **zbx_php** module with php :
 ```	      
 It should produce **zbx_php.so** in **/path/to/zabbix/install/modules/dir**.
 
-# Configure **zbx_php** with zabbix
+# Configure zbx_php with zabbix
 
 Zabbix agent, server and proxy support two parameters to deal with modules:
 
@@ -194,3 +194,8 @@ http://nginx.org/en/docs/http/ngx_http_stub_status_module.html?utm_campaign=moni
 
 https://httpd.apache.org/docs/current/mod/mod_status.html
 https://github.com/ZenProjects/Apache-Status-Text-Module
+
+- docker with docker api... using "/containers/(id or name)/stats" api...
+
+https://docs.docker.com/engine/reference/api/docker_remote_api/
+https://github.com/docker-php/docker-php

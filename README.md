@@ -121,3 +121,30 @@ To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with argum
 ....
 ```
 
+# some idea that can do with this module
+
+- monitoring ldap directory in ldap:
+	https://docs.oracle.com/cd/E19476-01/821-0506/monitoring-using-cn-monitor.html
+	http://php.net/manual/fr/book.ldap.php
+- monitoring mysql with sql requesting:
+	https://www.vividcortex.com/blog/2014/11/03/mysql-query-performance-statistics-in-the-performance-schema/
+	http://php.net/manual/fr/ref.pdo-mysql.php
+	https://dev.mysql.com/doc/refman/5.6/en/performance-schema.html
+	https://blog.serverdensity.com/how-to-monitor-mysql/ -> 
+- SNMP equipement that need data manipulation before sending result to zabbix
+	http://php.net/manual/fr/book.snmp.php
+- with ssh2 you can call script on other machine in php
+	http://php.net/manual/fr/book.ssh2.php
+- with rpc protocol (soap/rest/xml-rpc/trait...) you can get remote information 
+	http://php.net/manual/fr/book.soap.php
+	http://php.net/manual/fr/book.xmlrpc.php
+- with sockets you can call many network service to retreive information
+	http://php.net/manual/fr/book.sockets.php
+- you can check dns
+	http://php.net/manual/fr/function.dns-get-record.php
+	https://netdns2.com/documentation/examples/
+- with curl you can use many protocol to retrieve information
+	http://php.net/manual/fr/book.curl.php
+- maany nosql have there statistics acessible with her protocol like memcache
+	http://php.net/manual/fr/memcached.getstats.php
+

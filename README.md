@@ -101,10 +101,14 @@ Generale example are :
 
 The module set the type returned correctly accordingly to the dectected type from php variable.
 
-The module set **max_execution_time** to **Timeout** zabbix configuration setting.
+The module set **max_execution_time** according to **Timeout** zabbix configuration setting, after this time the php interpreter interupt the script and zabbix receve ZBX_NOT_SUPPORTED on the metric item.
+
+warning : http://php.net/manual/en/function.sleep.php#33732
+
+	Note: The **set_time_limit()** function and the configuration directive **max_execution_time** only affect the execution time of the script itself. Any time spent on activity that happens outside the execution of the script such as system calls using system(), the sleep() function, database queries, etc. is not included when determining the maximum time that the script has been running.
 
 The module set tree variable to the script:
-- **zabbix_timeout** - setted to **Timeout** zabbix configuration parametter, by default to 3
+- **zabbix_timeout** - setted to **Timeout** zabbix configuration parametter, by default to 3 in zabbix configuration.
 - **zabbix_key** - normaly "php"
 - **zabbix_params** - array starting with php and followed by argument sended to the module (that are in [...])
 

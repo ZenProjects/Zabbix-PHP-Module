@@ -59,7 +59,7 @@ Upon agent startup it will load the **zbx_php.so** modules from the **/path/to/z
 
 # Zabbix Frontend configuration
 
-Loadable modules are supported by Zabbix **agent**, **server** and **proxy**. Therefore, item type in Zabbix frontend depends on where the module is loaded. If the module is loaded into the agent, then the item type should be **“Zabbix agent”** or **“Zabbix agent (active)”**. If the module is loaded into **server** or **proxy**, then the item type should be **“Simple check”**.
+Loadable modules are supported by Zabbix **agent**, **server** and **proxy**. Therefore, item type in Zabbix frontend depends on where the module is loaded. If the module is loaded into the **agent**, then the item type should be **“Zabbix agent”** or **“Zabbix agent (active)”**. If the module is loaded into **server** or **proxy**, then the item type should be **“Simple check”**.
 
 - **zbx_php.ping** - always returns '1'
 - **zbx_php.version** - returns the php version

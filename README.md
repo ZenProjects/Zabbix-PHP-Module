@@ -134,13 +134,17 @@ You can find sample script in **"scripts_examples"** folder of the project.
 - Monitoring ldap directory in ldap:
 
 https://docs.oracle.com/cd/E19476-01/821-0506/monitoring-using-cn-monitor.html
+
 http://php.net/manual/en/book.ldap.php
 
 - Monitoring sql database with sql requesting:
 
 https://www.vividcortex.com/blog/2014/11/03/mysql-query-performance-statistics-in-the-performance-schema/
+
 http://php.net/manual/en/ref.pdo-mysql.php
+
 https://dev.mysql.com/doc/refman/5.6/en/performance-schema.html
+
 https://blog.serverdensity.com/how-to-monitor-mysql/ 
 
 - SNMP equipement that need data manipulation before sending result to zabbix
@@ -154,8 +158,11 @@ http://php.net/manual/en/book.ssh2.php
 - With rpc protocol (soap/rest/xml-rpc/trait...) you can get remote information 
 
 http://php.net/manual/en/book.soap.php
+
 http://php.net/manual/en/book.xmlrpc.php
+
 http://thrift.apache.org/ 
+
 https://thrift.apache.org/tutorial/php
 
 - With sockets you can call many network service to retreive information
@@ -165,6 +172,7 @@ http://php.net/manual/en/book.sockets.php
 - You can check dns
 
 http://php.net/manual/en/function.dns-get-record.php
+
 https://netdns2.com/documentation/examples/
 
 - With curl you can use many protocol to retrieve information
@@ -178,12 +186,15 @@ http://php.net/manual/en/memcached.getstats.php
 - Linux kernel monitoring in parsing /proc
 
 https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+
 http://blog.tsunanet.net/2011/03/out-of-socket-memory.html
+
 http://kaivanov.blogspot.fr/2013/01/troubleshooting-out-of-socket-memory.html
 
 - Disk drive space
 
 http://php.net/manual/en/function.disk-total-space.php
+
 http://php.net/manual/en/function.disk-free-space.php
 
 - nginx with http get or curl module
@@ -193,14 +204,17 @@ http://nginx.org/en/docs/http/ngx_http_stub_status_module.html?utm_campaign=moni
 - apache with mod_status ou mod_status_text
 
 https://httpd.apache.org/docs/current/mod/mod_status.html
+
 https://github.com/ZenProjects/Apache-Status-Text-Module
 
 - docker with docker api... using "/containers/(id or name)/stats" api...
 
 https://docs.docker.com/engine/reference/api/docker_remote_api/
+
 https://github.com/docker-php/docker-php
 
 - many kernel statistics of /proc like /proc/diskstats or /proc/net/tcp or /proc/net/sockstat
 
 http://www.onlamp.com/pub/a/linux/2000/11/16/LinuxAdmin.html
+
 http://linux.die.net/man/5/proc

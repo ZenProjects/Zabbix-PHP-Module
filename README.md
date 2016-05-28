@@ -147,4 +147,12 @@ To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with argum
 	http://php.net/manual/fr/book.curl.php
 - maany nosql have there statistics acessible with her protocol like memcache
 	http://php.net/manual/fr/memcached.getstats.php
+- linux kernel monitoring in parsing /proc
+	https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+	http://blog.tsunanet.net/2011/03/out-of-socket-memory.html
+	http://kaivanov.blogspot.fr/2013/01/troubleshooting-out-of-socket-memory.html
+- monitorer les disques
+ 	http://php.net/manual/fr/function.disk-total-space.php
+	http://php.net/manual/fr/function.disk-free-space.php
+
 

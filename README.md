@@ -105,7 +105,7 @@ The module set **"max_execution_time"** according to **"Timeout"** zabbix config
 
 **Warning : http://php.net/manual/en/function.sleep.php#33732**
 
-**Note**: The **set_time_limit()** function and the configuration directive **max_execution_time** only affect the execution time of the script itself. Any time spent on activity that happens outside the execution of the script such as system calls using system(), the sleep() function, database queries, etc. is not included when determining the maximum time that the script has been running.
+  **Note**: The **set_time_limit()** function and the configuration directive **max_execution_time** only affect the execution time of the script itself. Any time spent on activity that happens outside the execution of the script such as system calls using system(), the sleep() function, database queries, etc. is not included when determining the maximum time that the script has been running.
 
 The module set tree variable to the script:
 - **zabbix_timeout** - setted to **"Timeout"** zabbix configuration parametter, by default to 3 in zabbix configuration.

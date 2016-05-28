@@ -69,7 +69,7 @@ Loadable modules are supported by Zabbix agent, server and proxy. Therefore, ite
 
 The module as config file in the same place of the Zabbix Agentd/Server/proxy are, named **zbx_php.conf**.
 
-for the moment containt only one parameter PHP_SCRIPT_PATH, that spcify where php script are searched to execute:
+for the moment containt only one parameter PHP_SCRIPT_PATH, that specify where php script are searched to execute:
 
 ```
 	PHP_SCRIPT_PATH=/usr/local/lib/zabbix/phpscripts
@@ -103,12 +103,12 @@ The module set the type returned correctly accordingly to the dectected type fro
 
 The module set **max_execution_time** to **Timeout** zabbix configuration setting.
 
-the module set tree variable to the script:
+The module set tree variable to the script:
 - **zabbix_timeout** - setted to **Timeout** zabbix configuration parametter, by default to 3
 - **zabbix_key** - normaly "php"
 - **zabbix_params** - array starting with php and followed by argument sended to the module (that are in [...])
 
-by **default** the php ini parametter are to :
+By **default** the php ini parametter are to :
 - **html_errors** = 0
 - **register_argc_argv** = 1
 - **implicit_flush** = 1
@@ -121,37 +121,37 @@ To execute the script **"test.php"** in **PHP_SCRIPT_PATH** directory with argum
 ....
 ```
 
-# some idea that can do with this module
+# Some idea that can do with this module
 
-- monitoring ldap directory in ldap:
+- Monitoring ldap directory in ldap:
 	https://docs.oracle.com/cd/E19476-01/821-0506/monitoring-using-cn-monitor.html
 	http://php.net/manual/fr/book.ldap.php
-- monitoring mysql with sql requesting:
+- Monitoring mysql with sql requesting:
 	https://www.vividcortex.com/blog/2014/11/03/mysql-query-performance-statistics-in-the-performance-schema/
 	http://php.net/manual/fr/ref.pdo-mysql.php
 	https://dev.mysql.com/doc/refman/5.6/en/performance-schema.html
 	https://blog.serverdensity.com/how-to-monitor-mysql/ -> 
 - SNMP equipement that need data manipulation before sending result to zabbix
 	http://php.net/manual/fr/book.snmp.php
-- with ssh2 you can call script on other machine in php
+- With ssh2 you can call script on other machine in php
 	http://php.net/manual/fr/book.ssh2.php
-- with rpc protocol (soap/rest/xml-rpc/trait...) you can get remote information 
+- With rpc protocol (soap/rest/xml-rpc/trait...) you can get remote information 
 	http://php.net/manual/fr/book.soap.php
 	http://php.net/manual/fr/book.xmlrpc.php
-- with sockets you can call many network service to retreive information
+- With sockets you can call many network service to retreive information
 	http://php.net/manual/fr/book.sockets.php
-- you can check dns
+- You can check dns
 	http://php.net/manual/fr/function.dns-get-record.php
 	https://netdns2.com/documentation/examples/
-- with curl you can use many protocol to retrieve information
+- With curl you can use many protocol to retrieve information
 	http://php.net/manual/fr/book.curl.php
-- maany nosql have there statistics acessible with her protocol like memcache
+- Many nosql have there statistics acessible with her protocol like memcache
 	http://php.net/manual/fr/memcached.getstats.php
-- linux kernel monitoring in parsing /proc
+- Linux kernel monitoring in parsing /proc
 	https://www.kernel.org/doc/Documentation/filesystems/proc.txt
 	http://blog.tsunanet.net/2011/03/out-of-socket-memory.html
 	http://kaivanov.blogspot.fr/2013/01/troubleshooting-out-of-socket-memory.html
-- monitorer les disques
+- Monitorer les disques
  	http://php.net/manual/fr/function.disk-total-space.php
 	http://php.net/manual/fr/function.disk-free-space.php
 

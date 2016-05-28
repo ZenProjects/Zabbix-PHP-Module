@@ -186,3 +186,11 @@ http://kaivanov.blogspot.fr/2013/01/troubleshooting-out-of-socket-memory.html
 http://php.net/manual/en/function.disk-total-space.php
 http://php.net/manual/en/function.disk-free-space.php
 
+- nginx with http get or curl module
+
+http://nginx.org/en/docs/http/ngx_http_stub_status_module.html?utm_campaign=monitor-nginx-2014-aug&utm_medium=post&utm_source=blog
+
+- apache with mod_status ou mod_status_text
+
+https://httpd.apache.org/docs/current/mod/mod_status.html
+https://github.com/ZenProjects/Apache-Status-Text-Module

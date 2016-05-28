@@ -127,6 +127,8 @@ To execute the script **"test.php"** in **"PHP_SCRIPT_PATH"** directory with arg
 ....
 ```
 
+You can find sample script in **"scripts_examples"** folder of the project.
+
 # Some idea that can do with this module
 
 - Monitoring ldap directory in ldap:

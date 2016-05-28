@@ -65,7 +65,7 @@ Loadable modules are supported by Zabbix agent, server and proxy. Therefore, ite
 - **zbx_php.version** - returns the php version
 - **php[phpscript.php, param1, param2, ...]** - execute phpscript with params
 
-# configure module
+# Configure module
 
 The module as config file in the same place of the Zabbix Agentd/Server/proxy are, named **zbx_php.conf**.
 

@@ -111,8 +111,8 @@ You must pay attention on this when you code your scripts beceause Zabbix not ab
 
 The module set tree variable to the script:
 - **zabbix_timeout** - setted to **"Timeout"** zabbix configuration parametter, by default to 3 in zabbix configuration.
-- **zabbix_key** - normaly "php"
-- **zabbix_params** - array starting with php and followed by argument sended to the module (that are in [...])
+- **zabbix_key** - while be "php[param1,param2,...]"
+- **zabbix_params** - array starting with php at indice 0 and followed by argument sended to the module (that are in [...])
 
 By **default** the php ini parametter are to :
 - **html_errors** = 0

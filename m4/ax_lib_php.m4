@@ -70,6 +70,15 @@ AC_HELP_STRING([--with-php@<:@=ARG@:>@], [use PHP Embeded library @<:@default=no
         [want_php="no"]
     )
 
+
+  AC_ARG_WITH(
+    php_lib,
+[
+AC_HELP_STRING([--with-php_lib@<:@=DIR@:>@], [PHP lib subdirectory if different of /lib]) ],
+    ,
+    [with_php_lib="lib"]
+  )
+
     PHP_CFLAGS=""
     PHP_LDFLAGS=""
     PHP_LIBS=""
@@ -89,7 +98,7 @@ AC_HELP_STRING([--with-php@<:@=ARG@:>@], [use PHP Embeded library @<:@default=no
 
             PHP_CFLAGS="`$PHP_CONFIG --includes`"
             PHP_PREFIX="`$PHP_CONFIG --prefix`"
-            PHP_LDFLAGS="`$PHP_CONFIG --libs` -L$PHP_PREFIX/lib"
+            PHP_LDFLAGS="`$PHP_CONFIG --libs` -L$PHP_PREFIX/${with_php_lib} -Wl,-rpath,${PHP_PREFIX}/${with_php_lib}"
 
 	    _save_php_libs="${LIBS}"
 	    _save_php_ldflags="${LDFLAGS}"
@@ -97,7 +106,7 @@ AC_HELP_STRING([--with-php@<:@=ARG@:>@], [use PHP Embeded library @<:@default=no
 	    LDFLAGS="${LDFLAGS} ${PHP_LDFLAGS}"
 	    CFLAGS="${CFLAGS} ${PHP_CFLAGS}"
 
-	    AC_CHECK_LIB(php5 , php_embed_init,[ PHP_LIBS="-lphp5" ],[ AC_MSG_ERROR([Not found php embeded library]) ])
+	    AC_CHECK_LIB(php5, php_embed_init,[ PHP_LIBS="-lphp5" ],[ AC_MSG_ERROR([Not found php embeded library]) ])
 
 	    LIBS="${_save_php_libs}"
 	    LDFLAGS="${_save_php_ldflags}"

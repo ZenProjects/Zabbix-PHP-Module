@@ -107,7 +107,7 @@ The module set **"max_execution_time"** according to **"Timeout"** zabbix config
 >
 > The **set_time_limit()** function and the configuration directive **max_execution_time** only affect the execution time of the script itself. Any time spent on activity that happens outside the execution of the script such as system calls using system(), the sleep() function, database queries, etc. is not included when determining the maximum time that the script has been running.
 
-You must pay attention on this when you code your scripts beceause Zabbix not abort your script on timeout and they can block zabbix unlimitedly if you call PHP extension that block...
+You must pay attention on this when you code your scripts because Zabbix not abort your script on timeout and they can block zabbix unlimitedly if you call PHP extension that block...
 
 The module set tree variable to the script:
 - **zabbix_timeout** - setted to **"Timeout"** zabbix configuration parametter, by default to 3 in zabbix configuration.

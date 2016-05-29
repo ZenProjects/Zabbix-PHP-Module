@@ -39,8 +39,6 @@ static ZBX_METRIC keys[] =
 	{NULL}
 };
 
-#define BUFSIZE 4096
-
 /******************************************************************************
  *                                                                            *
  * Function: zbx_module_api_version                                           *
@@ -107,8 +105,8 @@ int	zbx_module_zbx_php_ping(AGENT_REQUEST *request, AGENT_RESULT *result)
  *                                                                            *
  ******************************************************************************/
 int load_php_env_config(void)  {
-    char conf_file[BUFSIZE];
-    char base_path[BUFSIZE];
+    char conf_file[MAX_STRING_LEN];
+    char base_path[MAX_STRING_LEN];
     int ret=0;
     static struct cfg_line cfg[] = {
 	    { "PHP_SCRIPT_PATH", &php_path, TYPE_STRING, PARM_MAND, 0, 0 },
@@ -117,13 +115,13 @@ int load_php_env_config(void)  {
     // CONFIG_FILE are populated a execution time with the default compiled path 
     // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
     // then get basepath and add zbx_php.cfg.
-    if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,BUFSIZE))!=SUCCESS)
+    if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,MAX_STRING_LEN))!=SUCCESS)
     {
       zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config get base path error : %d!!!!", ret);
       return ZBX_MODULE_FAIL;
     }
 
-    zbx_snprintf(conf_file, BUFSIZE, "%szbx_php.conf", base_path);
+    zbx_snprintf(conf_file, MAX_STRING_LEN, "%szbx_php.conf", base_path);
     zabbix_log( LOG_LEVEL_INFORMATION, ZBX_MODULE "Module Config lodaded from %s", conf_file);
     
     // use zabbix config parser
@@ -170,6 +168,7 @@ int	zbx_module_init()
 	  return ZBX_MODULE_FAIL;
 	}
 
+	zabbix_log( LOG_LEVEL_WARNING, "PHP support:           YES");
 	return ZBX_MODULE_OK;
 }
 
@@ -246,10 +245,9 @@ int zbx_set_return_value(AGENT_RESULT *result, zval *ret)
  ******************************************************************************/
 int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 {
-	TSRMLS_FETCH();
-	char    php_script_filename[BUFSIZE];
-	char    error[MAX_STRING_LEN];
-	char    cmd[MAX_STRING_LEN];
+	char php_script_filename[MAX_STRING_LEN];
+	char error[MAX_STRING_LEN];
+	char cmd[MAX_STRING_LEN];
 	long new_timeout;
 	char *new_timeout_str;
 	int new_timeout_strlen;
@@ -258,10 +256,9 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	zval *php_params; // array sended to the php script, containing request->params
 	zval *php_timeout; // long sended to the php script, containing request->timeout
 	zval *retval;
-
 	int     ret = SYSINFO_RET_OK;
 
-	zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "In get_value_php([%s])",request->key);
+	TSRMLS_FETCH();
 
 	// zabbix init result
 	//init_result(result);
@@ -274,14 +271,13 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	//////////////////////////////////////////////////
 	//// check php file script existance in php_path
-        zbx_snprintf(php_script_filename, BUFSIZE, "%s/%s", php_path,get_rparam(request, 0));
+        zbx_snprintf(php_script_filename, MAX_STRING_LEN, "%s/%s", php_path,get_rparam(request, 0));
 	if( access(php_script_filename, F_OK ) == -1 ) {
 	   zbx_snprintf(cmd, MAX_STRING_LEN-1, "PHP Script file '%s' not found in script folder '%s'.", request->key, php_path);
 	   SET_MSG_RESULT(result, strdup(cmd));
 	   return SYSINFO_RET_FAIL;
 	}
 
-	zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "Executing PHP script : %s", php_script_filename );
 
 	////////////////////////////////////////
 	//// php request init - "RINIT" phase
@@ -299,8 +295,6 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  //////////////////////////////////////////////////////
 	  // set php execution timeout with request->timeout
 	  new_timeout_strlen = spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
-
-	  zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "Set execution timeout to : %s", new_timeout_str );
 	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
 	  {
 	        efree(new_timeout_str);
@@ -325,13 +319,21 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  ZVAL_LONG(php_timeout, zbx_php_timeout);
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_timeout", php_timeout);
 
-	  ZVAL_STRING(php_key, request->key, 1);
-	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_key", php_key);
+	  zbx_strlcpy(cmd,request->key,MAX_STRING_LEN);
+	  zbx_strlcat(cmd,"[",MAX_STRING_LEN);
 
 	  for (i=0;i<request->nparam;i++) {
 	    add_next_index_string(php_params, get_rparam(request, i),1);
+	    zbx_strlcat(cmd,get_rparam(request, i),MAX_STRING_LEN);
+	    if (i!=request->nparam-1) zbx_strlcat(cmd,",",MAX_STRING_LEN);
+	    else zbx_strlcat(cmd,"]",MAX_STRING_LEN);
 	  }
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_params", php_params);
+
+	  ZVAL_STRING(php_key, cmd, 1);
+	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_key", php_key);
+
+	  zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "Get item : \"%s\" with script \"%s\"", cmd , php_script_filename );
 
 	  // re-initiliaze zval
 	  //memset(&retval,0,sizeof(retval));
@@ -355,7 +357,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	    // display the ret val value in string
 	    convert_to_string(retval);
-	    zabbix_log(LOG_LEVEL_DEBUG, ZBX_MODULE "PHP script code returned: -%s-", Z_STRVAL_P(retval));
+	    zabbix_log(LOG_LEVEL_DEBUG, ZBX_MODULE "PHP script code returned: \"%s\"", Z_STRVAL_P(retval));
 
 	    // free php ressource
 	    zval_dtor(retval);

@@ -25,8 +25,11 @@ Install it on centos 7 :
 # yum install php-embedded php-cli php-devel 
 ```
 
-How to compile it (the important option are "--enable-embed") :
+Or compile it (the important option are "--enable-embed") :
 ```
+# wget http://download.php.net/to/php/embed/php-5.6.x.tar.gz
+# tar xzvf php-5.6.x.tar.gz
+# cd php-5.6.x
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
 		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
 		      --with-curl=shared  --with-mysqli=shared 

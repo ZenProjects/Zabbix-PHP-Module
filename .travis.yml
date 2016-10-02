@@ -14,6 +14,6 @@ before_install:
 - ./bootstrap.sh
 
 install: 
-- CFLAGS=-I/usr/include/php5 -I/usr/include/php5/TSRM/ ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=./zabbix-3.2.1/include  
+- CFLAGS="-I/usr/include/php5 -I/usr/include/php5/TSRM/" ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=./zabbix-3.2.1/include  
 script:
   - make

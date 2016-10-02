@@ -11,6 +11,9 @@ before_install:
 - dpkg -L php5-dev
 - wget --content-disposition "http://downloads.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/3.2.1/zabbix-3.2.1.tar.gz?r=http%3A%2F%2Fwww.zabbix.com%2Fdownload.php&ts=1475431416&use_mirror=vorboss"
 - tar xzvf zabbix-3.2.1.tar.gz
+- cd zabbix-3.2.1
+- ./configure
+- cd -
 - ./bootstrap.sh
 
 install: 

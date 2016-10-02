@@ -7,7 +7,7 @@ branches:
   - master
 before_install:
 - sudo apt-get install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libdb5.1-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev php5-dev
-- wget --content-disposition "http://downloads.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/3.2.1/zabbix-3.2.1.tar.gz?r=http%3A%2F%2Fwww.zabbix.com%2Fdownload.php&ts=1475431416&use_mirror=vorboss"
+- wget --content-disposition "http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/3.2.1/zabbix-3.2.1.tar.gz/download"
 - tar xzvf zabbix-3.2.1.tar.gz
 - cd zabbix-3.2.1
 - ./configure

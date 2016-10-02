@@ -29,10 +29,19 @@ For example to have **libphp5.so** embeded library with snmp, ldap, curl and mys
 
 Compile the **zbx_php** module with php :
 
+For have get zabbix include necessary to build the module:
+```
+# wget http://download.zabbix.com/path/tozabbix/zabbix.tar.gz
+# tar xzvf zabbix.tar.gz
+# cd zabbix
+# ./configure
+# cd -
+```
+
 ```
 # ./bootstrap.sh
 # ./configure --with-php=/path/to/php/install/dir 
-              --with-zabbix-include=/path/to/zabbix/include/dir 
+              --with-zabbix-include=./zabbix/include 
               --prefix=/path/to/zabbix/install/modules/dir
 # make
 # make install

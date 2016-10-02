@@ -264,7 +264,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	//init_result(result);
 
 	// check the number of argument
-	if ((request->nparam < 1) || (strlen(get_rparam(request, 0)) == 0))   {
+	if ((request->nparam < 1) || (strlen(request->params[0]) == 0))   {
 	    SET_MSG_RESULT(result, strdup("Invalid number of parameters."));
 	    return SYSINFO_RET_FAIL;
 	}
@@ -294,7 +294,7 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 	  //////////////////////////////////////////////////////
 	  // set php execution timeout with request->timeout
-	  new_timeout_strlen = spprintf(&new_timeout_str, 0, "%ld", zbx_php_timeout);
+	  new_timeout_strlen = spprintf(&new_timeout_str, 0, "%d", zbx_php_timeout);
 	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
 	  {
 	        efree(new_timeout_str);

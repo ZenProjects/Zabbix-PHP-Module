@@ -26,7 +26,7 @@ Install it on centos 7 :
 # yum install php-embedded php-cli php-devel 
 ```
 
-Or compile it (the important option are "--enable-embed") :
+Or compile it (the important option are "--enable-embed") from [php 5.6 source](http://php.net/downloads.php#v5.6.26) :
 ```
 # wget http://download.php.net/to/php/embed/php-5.6.x.tar.gz
 # tar xzvf php-5.6.x.tar.gz
@@ -43,7 +43,7 @@ For example to have **libphp5.so** embeded library with snmp, ldap, curl and mys
 
 Compile the **zbx_php** module with php :
 
-For have get zabbix include necessary to build the module:
+For have get zabbix include necessary to build the module you must download [zabbix source](http://www.zabbix.com/download.php) :
 ```
 # wget http://download.zabbix.com/path/tozabbix/zabbix.tar.gz
 # tar xzvf zabbix.tar.gz

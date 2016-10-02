@@ -15,6 +15,16 @@ With that module you can extend functionality of the Zabbix with PHP module at t
 
 The **PHP Embed SAPI - libphp5.so** :
 
+Install it on ubuntu trusty :
+```
+# apt-get install libphp5-embed php5-dev
+```
+
+Install it on centos 7 :
+```
+# yum install php-embedded php-cli php-devel 
+```
+
 How to compile it (the important option are "--enable-embed") :
 ```
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
@@ -38,6 +48,7 @@ For have get zabbix include necessary to build the module:
 # cd -
 ```
 
+Them compile the module.
 ```
 # ./bootstrap.sh
 # ./configure --with-php=/path/to/php/install/dir 

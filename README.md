@@ -9,7 +9,7 @@ This directory contains a [Zabbix Loadable module](https://www.zabbix.com/docume
 
 This module add the ability to load PHP interpreter inside Zabbix Server/Proxy/Agent address space.
 
-Is based on my precedente work https://www.zabbix.com/forum/showthread.php?t=8305 to add the possibility to call script inside the zabbix engine. At this epoc i'have exchanged with Alexei Vladishev to add the possibility of loadable module... Now is done ! 
+Is based on my precedente work https://www.zabbix.com/forum/showthread.php?t=8305 to add the possibility to call script inside the zabbix engine. At this time I talked with Alexei Vladishev to add the ability to load module ... Now it's done! 
 
 With that module you can extend functionality of the Zabbix with PHP module at the infinite.
 

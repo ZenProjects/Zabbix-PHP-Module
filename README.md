@@ -151,7 +151,7 @@ To execute the script **"test.php"** in **"PHP_SCRIPT_PATH"** directory with arg
 ```
 # Samples
 
-With this items `php[snmpget.php,<hostname>,<community>]` they do snmp get of the `oid` on `<hostname>`, with `<community>`.
+With this items `php[snmpget.php,<hostname>,<community>,<oid>]` they do snmp get of the `oid` on `<hostname>`, with `<community>`.
 
 **snmpget.php** :
 ```php

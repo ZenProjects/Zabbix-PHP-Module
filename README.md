@@ -154,8 +154,8 @@ To execute the script **"test.php"** in **"PHP_SCRIPT_PATH"** directory with arg
 With this items `php[snmpget.php,<hostname>,<community>]` they do snmp get of `IF-MIB::ifInOctets.1` on `<hostname>`, with `<community>`.
 ```php
 <?php
-        $zabbix_hostname=$zabbix_params[1];
-        $zabbix_community=$zabbix_params[2];
+	$zabbix_hostname=$zabbix_params[1];
+	$zabbix_community=$zabbix_params[2];
 	snmp_set_quick_print(1);
 	$snmp_retval = snmpget($zabbix_hostname, $zabbix_community, "IF-MIB::ifInOctets.1");
 	return $snmp_retval;

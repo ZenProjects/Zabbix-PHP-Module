@@ -160,7 +160,7 @@ With this items `php[snmpget.php,<hostname>,<community>]` they do snmp get of th
 	$zabbix_community=$zabbix_params[2];
 	$zabbix_oid=$zabbix_params[3];
 	snmp_set_quick_print(1);
-	$snmp_retval = snmpget($zabbix_hostname, $zabbix_community, $oid);
+	$snmp_retval = snmpget($zabbix_hostname, $zabbix_community, $zabbix_oid);
 	return $snmp_retval;
 ```
 

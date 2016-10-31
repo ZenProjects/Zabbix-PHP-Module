@@ -151,16 +151,22 @@ To execute the script **"test.php"** in **"PHP_SCRIPT_PATH"** directory with arg
 ```
 # Samples
 
-With this items `php[snmpget.php,<hostname>,<community>]` they do snmp get of `IF-MIB::ifInOctets.1` on `<hostname>`, with `<community>`.
+With this items `php[snmpget.php,<hostname>,<community>]` they do snmp get of the `oid` on `<hostname>`, with `<community>`.
 
 **snmpget.php** :
 ```php
 <?php
 	$zabbix_hostname=$zabbix_params[1];
 	$zabbix_community=$zabbix_params[2];
+	$zabbix_oid=$zabbix_params[3];
 	snmp_set_quick_print(1);
-	$snmp_retval = snmpget($zabbix_hostname, $zabbix_community, "IF-MIB::ifInOctets.1");
+	$snmp_retval = snmpget($zabbix_hostname, $zabbix_community, $oid);
 	return $snmp_retval;
+```
+
+to use:
+```
+# zabbix_get  -s 127.0.0.1 -k php[snmpget.php,myhost,mycommunity,IF-MIB::ifInOctets.1]
 ```
 
 You can find sample script in **"scripts_examples"** folder of the project.

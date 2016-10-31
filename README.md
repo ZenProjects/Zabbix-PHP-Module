@@ -149,6 +149,14 @@ To execute the script **"test.php"** in **"PHP_SCRIPT_PATH"** directory with arg
 # zabbix_get  -s 127.0.0.1 -k php[test.php,mon test a moi]
 ....
 ```
+# Samples
+
+```php
+<?php
+	snmp_set_quick_print(1);
+	$snmp_retval = snmpget($zabbix_hostname, $zabbix_args, "IF-MIB::ifInOctets.1");
+	return $snmp_retval;
+```
 
 You can find sample script in **"scripts_examples"** folder of the project.
 

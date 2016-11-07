@@ -2,6 +2,7 @@
 [![Stories in Ready](https://badge.waffle.io/ZenProjects/ZBX-PHP.png?label=ready&title=Ready)](https://waffle.io/ZenProjects/ZBX-PHP)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![](https://piwik.ch2o.info/piwik.php?idsite=4)](https://piwik.ch2o.info)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/ZenProjects/Zabbix-PHP-Module/v1.0.2.1/total.svg)
 
 # Zabbix PHP Loadable Module
 

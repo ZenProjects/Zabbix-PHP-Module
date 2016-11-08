@@ -31,7 +31,8 @@ Or compile it (the important option are "--enable-embed") from [php 5.6 source](
 ```
 # wget https://github.com/php/php-src/archive/PHP-5.6.tar.gz
 # tar xzvf php-5.6.tar.gz
-# cd php-5.6.x
+# cd php-src-PHP-5.6
+# ./buildconf
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
 		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
 		      --with-curl=shared  --with-mysqli=shared 

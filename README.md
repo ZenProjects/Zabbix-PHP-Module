@@ -29,8 +29,8 @@ Install it on centos 7 :
 
 Or compile it (the important option are "--enable-embed") from [php 5.6 source](https://github.com/php/php-src/tree/PHP-5.6) :
 ```
-# wget http://download.php.net/to/php/embed/php-5.6.x.tar.gz
-# tar xzvf php-5.6.x.tar.gz
+# wget https://github.com/php/php-src/archive/PHP-5.6.tar.gz
+# tar xzvf php-5.6.tar.gz
 # cd php-5.6.x
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
 		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \

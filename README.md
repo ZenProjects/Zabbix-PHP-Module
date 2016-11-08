@@ -31,7 +31,7 @@ Or compile it (the important option are "--enable-embed") from [php 5.6 source](
 ```
 # wget https://github.com/php/php-src/archive/PHP-5.6.tar.gz
 # tar xzvf php-5.6.tar.gz
-# cd php-src-PHP-5.6
+# cd php*5.6*
 # ./buildconf
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
 		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
@@ -47,9 +47,9 @@ Compile the **zbx_php** module with php :
 
 For have get zabbix include necessary to build the module you must download [zabbix source](http://www.zabbix.com/download.php) :
 ```
-# wget http://download.zabbix.com/path/tozabbix/zabbix.tar.gz
-# tar xzvf zabbix.tar.gz
-# cd zabbix
+# wget --content-disposition "https://sourceforge.net/projects/zabbix/files/latest/download?source=files"
+# tar xzvf zabbix*.tar.gz
+# cd zabbix*
 # ./configure
 # cd -
 ```

@@ -3,9 +3,9 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![](https://piwik.ch2o.info/piwik.php?idsite=4)](https://piwik.ch2o.info)
 
-# Zabbix PHP Loadable Module
+# Zabbix PHP Loadable Module :
 
-This directory contains from Zabbix v2.2 a [Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy. 
+This directory contains from Zabbix v2.2 a [Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy.
 
 This module add the ability to load PHP interpreter inside Zabbix Server/Proxy/Agent address space.
 

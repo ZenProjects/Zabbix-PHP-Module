@@ -1,0 +1,8 @@
+title: Zabbix-php-module
+description: Zabbix Loadable Module for make monitoring with PHP scripting language
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions

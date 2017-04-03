@@ -57,7 +57,7 @@ For have get zabbix include necessary to build the module you must download [zab
 Them compile the module.
 ```
 # ./bootstrap.sh
-# ./configure --with-php=/path/to/php/install/dir 
+# ./configure --with-php=/path/to/php/script/php-config 
               --with-zabbix-include=./zabbix/include 
               --prefix=/path/to/zabbix/install/modules/dir
 # make

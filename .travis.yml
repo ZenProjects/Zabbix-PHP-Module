@@ -18,6 +18,7 @@ before_install:
 - ./bootstrap.sh
 
 install: 
-- PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=./zabbix-3.2.1/include  
+- export ZABBIX_PATH=$(cd zabbix*;pwd)
+- PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  
 script:
 - make

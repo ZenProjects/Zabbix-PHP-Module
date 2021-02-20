@@ -2,7 +2,7 @@ sudo: required
 
 dist: 
 - focal
-- xenial
+- trusty
 
 language: c
 
@@ -11,13 +11,14 @@ compiler: gcc
 branches:
   only:
   - master
+  
 before_install:
-- if [ "$TRAVIS_DIST" = "xenial" ]; then sudo apt-get install libphp5.6-embed php5.6-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev php5-dev; fi
-- if [ "$TRAVIS_DIST" = "focal" ]; then sudo apt-get install libphp-embed php-dev autoconf automake gcc make libpcre3-dev  libbz2-dev libbz2-dev libxml2-dev libkrb5-dev php5-dev; fi
-#- wget --content-disposition "http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/3.2.1/zabbix-3.2.1.tar.gz/download"
-#- tar xzvf zabbix-3.2.1.tar.gz
-#- cd zabbix-3.2.1
-- wget --content-disposition "https://sourceforge.net/projects/zabbix/files/latest/download?source=files"
+- if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev php5-dev; fi
+- if [ "$TRAVIS_DIST" = "trusty" ]; then wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/4.0/zabbix-4.0.28.tar.gz"; fi
+
+- if [ "$TRAVIS_DIST" = "focal" ]; then sudo apt-get install libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev php5-dev; fi
+- if [ "$TRAVIS_DIST" = "focal" ]; then wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.8.tar.gz"; fi
+
 - tar xzvf zabbix*.tar.gz
 - cd zabbix*
 - ./configure
@@ -27,5 +28,6 @@ before_install:
 install: 
 - export ZABBIX_PATH=$(cd zabbix*;pwd)
 - PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  
+
 script:
 - make

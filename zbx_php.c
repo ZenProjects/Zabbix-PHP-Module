@@ -221,10 +221,15 @@ int zbx_set_return_value(AGENT_RESULT *result, zval *ret)
 {
     if (Z_TYPE_P(ret) == IS_LONG) {
         SET_UI64_RESULT(result, Z_LVAL_P(ret));
+#if PHP_VERSION_ID < 70000
+    } else if (Z_TYPE_P(ret) == IS_BOOL) {
+        SET_UI64_RESULT(result, Z_BVAL_P(ret));
+#else
     } else if (Z_TYPE_P(ret) == IS_TRUE) {
         SET_UI64_RESULT(result, 0);
     } else if (Z_TYPE_P(ret) == IS_FALSE) {
         SET_UI64_RESULT(result, 1);
+#endif
     } else if (Z_TYPE_P(ret) == IS_DOUBLE) {
         SET_DBL_RESULT(result, Z_DVAL_P(ret));
     } else if (Z_TYPE_P(ret) == IS_STRING) {

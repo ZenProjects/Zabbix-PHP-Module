@@ -20,6 +20,10 @@
 
 #include "zbx_php.h"
 
+// PHP Embed Helper
+#include "php_embeded.h"
+
+
 /* the variable keeps timeout setting for item processing */
 int		zbx_php_timeout = 0;
 char        	*php_path = NULL;
@@ -115,7 +119,7 @@ int load_php_env_config(void)  {
     // CONFIG_FILE are populated a execution time with the default compiled path 
     // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
     // then get basepath and add zbx_php.cfg.
-    if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,MAX_STRING_LEN))!=SUCCESS)
+    if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,MAX_STRING_LEN))!=MCA_SUCCESS)
     {
       zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config get base path error : %d!!!!", ret);
       return ZBX_MODULE_FAIL;
@@ -206,13 +210,15 @@ int	zbx_module_zbx_php_version(AGENT_REQUEST *request, AGENT_RESULT *result)
 
 int zbx_set_return_value(AGENT_RESULT *result, zval *ret) 
 {
-    if (ret->type == IS_LONG) {
+    if (Z_TYPE_P(ret) == IS_LONG) {
         SET_UI64_RESULT(result, Z_LVAL_P(ret));
-    } else if (ret->type == IS_BOOL) {
-        SET_UI64_RESULT(result, Z_BVAL_P(ret));
-    } else if (ret->type == IS_DOUBLE) {
+    } else if (Z_TYPE_P(ret) == IS_TRUE) {
+        SET_UI64_RESULT(result, 0);
+    } else if (Z_TYPE_P(ret) == IS_FALSE) {
+        SET_UI64_RESULT(result, 1);
+    } else if (Z_TYPE_P(ret) == IS_DOUBLE) {
         SET_DBL_RESULT(result, Z_DVAL_P(ret));
-    } else if (ret->type == IS_STRING) {
+    } else if (Z_TYPE_P(ret) == IS_STRING) {
         SET_STR_RESULT(result, strdup(Z_STRVAL_P(ret)));
     } else {
         SET_MSG_RESULT(result, strdup("PHP returned unsupported value"));
@@ -252,10 +258,17 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	char *new_timeout_str;
 	int new_timeout_strlen;
 	int     i;
+#if PHP_VERSION_ID >= 70000
+	zval php_key; // string sended to the php script, containing request->key 
+	zval php_params; // array sended to the php script, containing request->params
+	zval php_timeout; // long sended to the php script, containing request->timeout
+	zval retval;
+#else
 	zval *php_key; // string sended to the php script, containing request->key 
 	zval *php_params; // array sended to the php script, containing request->params
 	zval *php_timeout; // long sended to the php script, containing request->timeout
 	zval *retval;
+#endif
 	int     ret = SYSINFO_RET_OK;
 
 	TSRMLS_FETCH();
@@ -295,7 +308,14 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  //////////////////////////////////////////////////////
 	  // set php execution timeout with request->timeout
 	  new_timeout_strlen = spprintf(&new_timeout_str, 0, "%d", zbx_php_timeout);
+
+#if PHP_VERSION_ID >= 70000
+	  zend_string *zszIniEntry = NULL;
+	  zszIniEntry = zend_string_init("max_execution_time",(long unsigned int)sizeof("max_execution_time"),0);
+	  if (zend_alter_ini_entry_chars_ex(zszIniEntry, (const char *)(new_timeout_str), new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
+#else
 	  if (zend_alter_ini_entry_ex("max_execution_time", sizeof("max_execution_time"), new_timeout_str, new_timeout_strlen, ZEND_INI_USER, ZEND_INI_STAGE_RUNTIME, 0 TSRMLS_CC) != SUCCESS) 
+#endif
 	  {
 	        efree(new_timeout_str);
 		zbx_snprintf(error,MAX_STRING_LEN-1,"setting execution timeout to [%d] not succed", zbx_php_timeout);
@@ -310,18 +330,26 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  // prepare argument information to send to the script to execute
 	  //////////////////////////////////////////////////////////////////
 
+#if PHP_VERSION_ID < 70000
 	  MAKE_STD_ZVAL(php_params);
-          array_init(php_params); // initialize an php array to contains request->parms array
-
 	  MAKE_STD_ZVAL(php_key); // initialize an php variable to contains the request->key string
 	  MAKE_STD_ZVAL(php_timeout); // initialize an php variable to contains the request->timeout value
-
+          array_init(php_params); // initialize an php array to contains request->parms array
 	  ZVAL_LONG(php_timeout, zbx_php_timeout);
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_timeout", php_timeout);
+#else
+          array_init(&php_params); // initialize an php array to contains request->parms array
+	  ZVAL_LONG(&php_timeout, zbx_php_timeout);
+	  zend_string *zszVariableName = NULL;
+	  zszVariableName = zend_string_init("zabbix_timeout",(long unsigned int)sizeof("zabbix_timeout"),0);
+	  zend_hash_update(&EG(symbol_table), zszVariableName, &php_timeout);
+#endif
 
 	  zbx_strlcpy(cmd,request->key,MAX_STRING_LEN);
 	  zbx_strlcat(cmd,"[",MAX_STRING_LEN);
 
+#if PHP_VERSION_ID < 70000
+	  // set zabbix_params as php variable
 	  for (i=0;i<request->nparam;i++) {
 	    add_next_index_string(php_params, get_rparam(request, i),1);
 	    zbx_strlcat(cmd,get_rparam(request, i),MAX_STRING_LEN);
@@ -330,19 +358,45 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  }
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_params", php_params);
 
+	  // set zabbix_key as php variable
 	  ZVAL_STRING(php_key, cmd, 1);
 	  ZEND_SET_SYMBOL(&EG(symbol_table), "zabbix_key", php_key);
+#else
+	  // set zabbix_params as php variable
+	  for (i=0;i<request->nparam;i++) {
+	    add_next_index_string(&php_params, get_rparam(request, i));
+	    zbx_strlcat(cmd,get_rparam(request, i),MAX_STRING_LEN);
+	    if (i!=request->nparam-1) zbx_strlcat(cmd,",",MAX_STRING_LEN);
+	    else zbx_strlcat(cmd,"]",MAX_STRING_LEN);
+	  }
+	  zend_string *zszZabbixParams = NULL;
+	  zszZabbixParams = zend_string_init("zabbix_params",(long unsigned int)sizeof("zabbix_params"),0);
+	  zend_hash_update(&EG(symbol_table), zszZabbixParams, &php_params);
+	  
+	  // set zabbix_key as php variable
+	  ZVAL_STRING(&php_key, cmd);
+	  zend_string *zszZabbixKey = NULL;
+	  zszZabbixKey = zend_string_init("zabbix_key",(long unsigned int)sizeof("zabbix_key"),0);
+	  zend_hash_update(&EG(symbol_table), zszZabbixKey, &php_key);
+#endif
+
 
 	  zabbix_log( LOG_LEVEL_DEBUG, ZBX_MODULE "Get item : \"%s\" with script \"%s\"", cmd , php_script_filename );
 
+#if PHP_VERSION_ID < 70400
 	  // re-initiliaze zval
 	  //memset(&retval,0,sizeof(retval));
 	  ALLOC_INIT_ZVAL(retval);
+#endif
 
 	  //////////////////////////////
 	  // execute php script
 	  //////////////////////////////
-	  if ((retval=php_embed_execute(php_script_filename TSRMLS_CC)) == NULL) 
+#if PHP_VERSION_ID < 70000
+	  if (php_embed_execute(php_script_filename,retval TSRMLS_CC) != SUCCESS) 
+#else
+	  if (php_embed_execute(php_script_filename,&retval TSRMLS_CC) != SUCCESS) 
+#endif
 	  {
 	      zbx_snprintf(error,MAX_STRING_LEN-1,"External check [%s] is not supported, failed execution", request->key);
 	      zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "%s", error);
@@ -352,18 +406,28 @@ int	zbx_module_zbx_php_call(AGENT_REQUEST *request, AGENT_RESULT *result)
 	  }
 	  else
 	  {
+#if PHP_VERSION_ID < 70000
 	    // set result in function of the type of zval retval
 	    ret=zbx_set_return_value(result,retval);
 
 	    // display the ret val value in string
 	    convert_to_string(retval);
 	    zabbix_log(LOG_LEVEL_DEBUG, ZBX_MODULE "PHP script code returned: \"%s\"", Z_STRVAL_P(retval));
-
+	    
 	    // free php ressource
 	    zval_dtor(retval);
 	    zval_dtor(php_key);
 	    zval_dtor(php_params);
 	    zval_dtor(php_timeout);
+#else
+	    // set result in function of the type of zval retval
+	    ret=zbx_set_return_value(result,&retval);
+
+	    // display the ret val value in string
+	    convert_to_string(&retval);
+	    zabbix_log(LOG_LEVEL_DEBUG, ZBX_MODULE "PHP script code returned: \"%s\"", Z_STRVAL(retval));
+#endif
+
 	  }
 	} zend_catch {
 	   ret=SYSINFO_RET_FAIL;

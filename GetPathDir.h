@@ -24,12 +24,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FAILURE_NULL_ARGUMENT 1
-#define FAILURE_INVALID_ARGUMENTS 2
-#define FAILURE_INVALID_PATH 3
-#define FAILURE_BUFFER_TOO_SMALL 4
-#define FAILURE_API_CALL 5
-#define SUCCESS 0
+#define MCA_FAILURE_NULL_ARGUMENT 1
+#define MCA_FAILURE_INVALID_ARGUMENTS 2
+#define MCA_FAILURE_INVALID_PATH 3
+#define MCA_FAILURE_BUFFER_TOO_SMALL 4
+#define MCA_FAILURE_API_CALL 5
+#define MCA_SUCCESS 0
 extern int get_base_path_from_pathname( const char*  const p_pathname,
 					size_t             pathname_size,
 					char* const        p_basepath,

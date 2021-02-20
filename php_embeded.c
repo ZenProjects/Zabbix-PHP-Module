@@ -73,6 +73,11 @@
 *  https://www.amazon.fr/Advanced-PHP-Programming-George-Schlossnagle/dp/0672325616
 */
 
+/* upgrading to php7
+ * https://wiki.php.net/phpng-upgrading
+ * https://www.programmersought.com/article/42361486581/
+ */
+
 #include "php_embeded.h"
 #include "ext/standard/php_standard.h"
 
@@ -81,7 +86,6 @@
     #error "Need PHP version >= 5.5 to compile this file"
 #endif
 
-
 /******************************************************************************
  *                                                                            *
  * Function: php_embed_eval_string                                            *
@@ -89,19 +93,15 @@
  * Purpose: eval php script string transmit in code.                           *
  *                                                                            *
  ******************************************************************************/
-zval *php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRMLS_DC)
+int php_embed_eval_string(char *code, zval *retval, char *string_name TSRMLS_DC)
 {
-    zval * retval;
-    ALLOC_INIT_ZVAL(retval);
-
     zend_try {
-	 if (SUCCESS == zend_eval_string(code, retval, string_name TSRMLS_CC)) 
-	    return retval;
+	 if (SUCCESS == zend_eval_string(code, retval, string_name TSRMLS_CC)) return SUCCESS;
     } zend_catch {
 
     } zend_end_try();
 
-    return retval;
+    return FAILURE;
 }
 
 
@@ -112,10 +112,9 @@ zval *php_embed_eval_string(char *code, zval *retval_ptr, char *string_name TSRM
  * Purpose: execute filename script.                                          *
  *                                                                            *
  ******************************************************************************/
-zval * php_embed_execute(char *filename TSRMLS_DC)
+int php_embed_execute(char *filename, zval *retval TSRMLS_DC)
 {
     int ret = 0;
-    zval *retval = NULL;
     zend_file_handle zfd;
 
     zfd.type = ZEND_HANDLE_FILENAME;
@@ -125,9 +124,9 @@ zval * php_embed_execute(char *filename TSRMLS_DC)
     zfd.opened_path = NULL;
     zend_try {
 	 if (SUCCESS == zend_execute_scripts(ZEND_REQUIRE TSRMLS_CC, &retval, 1, &zfd)) 
-	     if (retval) return retval;
+	     return SUCCESS;
     } zend_end_try();
-    return retval;
+    return FAILURE;
 }
 
 
@@ -151,7 +150,7 @@ static const zend_function_entry my_additional_functions[] = {
  */
 int php_embed_minit(const char* hardcoded_ini PTSRMLS_DC)
 {
-#ifdef ZTS
+#if defined(ZTS) && PHP_VERSION_ID < 70400
 	void ***tsrm_ls = NULL;
 #endif
 	int ini_entries_len = 0;
@@ -168,11 +167,22 @@ int php_embed_minit(const char* hardcoded_ini PTSRMLS_DC)
 #endif
 
 #ifdef ZTS
+#if PHP_VERSION_ID >= 70400
+  php_tsrm_startup();
+#else
   tsrm_startup(1, 1, 0, NULL);
   tsrm_ls = ts_resource(0);
   *ptsrm_ls = tsrm_ls;
 #endif
+#endif
 
+#if PHP_VERSION_ID >= 70000 && defined(ZEND_SIGNALS)
+#if HAVE_ZEND_SIGNAL_STARTUP
+  zend_signal_startup();
+#elif defined(ZTS)
+  #error PHP is built with thread safety and broken signals.
+#endif
+#endif
   if (hardcoded_ini!=NULL)
   {
     ini_entries_len = strlen(hardcoded_ini);

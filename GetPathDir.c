@@ -21,12 +21,12 @@
 
 // Retrieves the pathpath from a pathname.
 //
-// Returns: SUCCESS if the basepath is present and successfully copied to the p_base_path buffer
-//          FAILURE_NULL_ARGUMENT if any arguments are NULL
-//          FAILURE_INVALID_ARGUMENTS if either buffer size is less than 1
-//          FAILURE_BUFFER_TOO_SMALL if the p_basepath buffer is too small
-//          FAILURE_INVALID_PATH if the p_pathname doesn't have a path (e.g. C:, calc.exe, ?qwa)
-//          FAILURE_API_CALL if there is an error from the underlying API calls
+// Returns: MCA_SUCCESS if the basepath is present and successfully copied to the p_base_path buffer
+//          MCA_FAILURE_NULL_ARGUMENT if any arguments are NULL
+//          MCA_FAILURE_INVALID_ARGUMENTS if either buffer size is less than 1
+//          MCA_FAILURE_BUFFER_TOO_SMALL if the p_basepath buffer is too small
+//          MCA_FAILURE_INVALID_PATH if the p_pathname doesn't have a path (e.g. C:, calc.exe, ?qwa)
+//          MCA_FAILURE_API_CALL if there is an error from the underlying API calls
 int get_base_path_from_pathname( const char*  const p_pathname,
                                  size_t             pathname_size,
                                  char* const        p_basepath,
@@ -37,28 +37,28 @@ int get_base_path_from_pathname( const char*  const p_pathname,
   int    return_code;
 
   // Parameter Validation
-  if( p_pathname == NULL || p_basepath == NULL ) { return FAILURE_NULL_ARGUMENT; }
-  if( pathname_size < 1 || basepath_size < 1 ) { return FAILURE_INVALID_ARGUMENTS; }
+  if( p_pathname == NULL || p_basepath == NULL ) { return MCA_FAILURE_NULL_ARGUMENT; }
+  if( pathname_size < 1 || basepath_size < 1 ) { return MCA_FAILURE_INVALID_ARGUMENTS; }
 
   // Returns a pointer to the last occurrence of \ in p_pathname or NULL if it is not found
   p_end_of_path = strrchr( p_pathname, '/' );
   if( p_end_of_path == NULL )
   {
     // There is no path part
-    return FAILURE_INVALID_PATH;
+    return MCA_FAILURE_INVALID_PATH;
   } 
   else 
   {
     path_length = (size_t)( p_end_of_path - p_pathname + 1 );
 
     // Do some sanity checks on the length
-    if( path_length < 1 ) { return FAILURE_INVALID_PATH; }
-    if( ( path_length + 1 ) > basepath_size ) { return FAILURE_BUFFER_TOO_SMALL; }
+    if( path_length < 1 ) { return MCA_FAILURE_INVALID_PATH; }
+    if( ( path_length + 1 ) > basepath_size ) { return MCA_FAILURE_BUFFER_TOO_SMALL; }
 
     // Copy the base path into the out variable
     strncpy(p_basepath, p_pathname, path_length);
     p_basepath[path_length] = '\0';
   }
 
-  return SUCCESS;
+  return MCA_SUCCESS;
 }

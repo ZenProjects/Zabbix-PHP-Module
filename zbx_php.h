@@ -27,9 +27,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// PHP Embed Helper
-#include "php_embeded.h"
-
 // this macro are defined in php and in zabbix
 // to avoid warning in redefiniting it they are undef her befor 
 // zabbix header inclusion

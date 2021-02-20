@@ -2,3 +2,5 @@
 /* Define to 1 if PHP should be enabled. */
 #undef HAVE_PHP
 
+/* Define to 1 if zend_signal_startup exist. */
+#undef HAVE_ZEND_SIGNAL_STARTUP

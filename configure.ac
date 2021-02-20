@@ -43,7 +43,8 @@ AC_SUBST([LDFLAGS])
 AC_SUBST([LIBS])
 AC_SUBST([prefix])
 
-AC_OUTPUT(zbx_php_config.h Makefile)
+AC_CONFIG_HEADER(zbx_php_config.h)
+AC_OUTPUT(Makefile)
 
 echo ""
 echo " Zabbix PHP laodable module install diretory   = ${prefix}"

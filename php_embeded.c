@@ -123,7 +123,7 @@ int php_embed_execute(char *filename, zval *retval TSRMLS_DC)
     zfd.free_filename = 0;
     zfd.opened_path = NULL;
     zend_try {
-	 if (SUCCESS == zend_execute_scripts(ZEND_REQUIRE TSRMLS_CC, &retval, 1, &zfd)) 
+	 if (SUCCESS == zend_execute_scripts(ZEND_REQUIRE TSRMLS_CC, retval, 1, &zfd)) 
 	     return SUCCESS;
     } zend_end_try();
     return FAILURE;

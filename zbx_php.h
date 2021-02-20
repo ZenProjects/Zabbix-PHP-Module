@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <dlfcn.h>
 
 // this macro are defined in php and in zabbix
 // to avoid warning in redefiniting it they are undef her befor 

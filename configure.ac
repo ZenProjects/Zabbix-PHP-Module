@@ -47,6 +47,6 @@ AC_CONFIG_HEADER(zbx_php_config.h)
 AC_OUTPUT(Makefile)
 
 echo ""
-echo " Zabbix PHP laodable module install diretory   = ${prefix}"
-echo " Embeded PHP base directory                    = ${PHP_PREFIX}"
-echo " Zabbix include directory                      = ${ZABBIX_INC_DIR}"
+echo " Zabbix PHP laodable module install diretory[prefix]   = ${prefix}"
+echo " Embeded PHP base directory                            = ${PHP_PREFIX}"
+echo " Zabbix include directory                              = ${ZABBIX_INC_DIR}"

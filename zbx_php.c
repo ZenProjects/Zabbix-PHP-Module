@@ -156,6 +156,15 @@ int	zbx_module_init()
 {
 	TSRMLS_FETCH();
 
+        void *handle;	
+	char szPhpLib[256];
+	snprintf(szPhpLib, sizeof szPhpLib, "%s%d%s", "libphp", PHP_MAJOR_VERSION, ".so");
+        handle = dlopen (szPhpLib, RTLD_LAZY | RTLD_GLOBAL);
+        if (!handle) {
+	    zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load %s error!!!!\n%s",szPhpLib,dlerror());
+            exit(1);
+        }
+
 	// load zbx_php.cfg config file
 	if (load_php_env_config()!=ZBX_MODULE_OK) 
 	{

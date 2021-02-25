@@ -8,10 +8,6 @@ language: c
 
 compiler: gcc
 
-language: php
-php:
-  - system
-
 branches:
   only:
   - master

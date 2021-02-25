@@ -26,6 +26,7 @@ before_install:
 - tar xzvf zabbix*.tar.gz
 - cd zabbix*/
 - find /usr/lib /lib -name "libphp*so*"
+- cat /home/travis/.phpenv/version
 - ./configure
 - cd -
 - ./bootstrap.sh

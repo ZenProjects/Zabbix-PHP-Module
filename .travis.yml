@@ -1,8 +1,9 @@
 sudo: required
 
-dist: 
-- focal
-- trusty
+matrix:
+    include:
+        - dist: trusty
+        - dist: focal
 
 language: c
 

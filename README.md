@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ZenProjects/Zabbix-PHP-Module.svg?branch=master)](https://travis-ci.org/ZenProjects/Zabbix-PHP-Module)
+[![Build Status](https://travis-ci.com/ZenProjects/Zabbix-PHP-Module.svg?branch=master)](https://travis-ci.com/ZenProjects/Zabbix-PHP-Module)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![](https://piwik.ch2o.info/piwik.php?idsite=4)](https://piwik.ch2o.info)
 

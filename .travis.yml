@@ -28,7 +28,7 @@ before_install:
 
 install: 
 - export ZABBIX_PATH=$(cd zabbix*;pwd)
-- PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  || find .
+- PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
 
 script:
 - make

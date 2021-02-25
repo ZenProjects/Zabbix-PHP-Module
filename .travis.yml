@@ -16,7 +16,7 @@ before_install:
 - if [ "$TRAVIS_DIST" = "trusty" ]; then sudo apt-get install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev; fi
 - if [ "$TRAVIS_DIST" = "focal" ]; then sudo apt-get install libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev; fi
 
-- rm zabbix*
+- rm -f zabbix*
 - if [ "$TRAVIS_DIST" = "trusty" ]; then wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/4.0/zabbix-4.0.28.tar.gz"; fi
 - if [ "$TRAVIS_DIST" = "focal" ]; then wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.8.tar.gz"; fi
 - tar xzvf zabbix*.tar.gz

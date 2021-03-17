@@ -4,7 +4,7 @@
 
 # Zabbix PHP Loadable Module :
 
-This directory contains from Zabbix v2.2 a [Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy.
+This directory contains Zabbix [Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy.
 
 This module add the ability to load PHP `v5.x` interpreter inside Zabbix Server/Proxy/Agent address space.
 

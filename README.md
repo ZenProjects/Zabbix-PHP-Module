@@ -16,12 +16,17 @@ With that module you can extend functionality of the Zabbix with PHP module at t
 
 The **PHP Embed SAPI - libphp[57].so** (tested with v5.6 and v7.4) :
 
-Install it on ubuntu trusty :
+Install it on Ubuntu Trusty :
 ```
 # apt-get install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
 ```
 
-Install it on centos 7 :
+Install it on Ubuntu Focal :
+```
+# apt-get install libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libargon2-0 libsodium-dev
+```
+
+Install it on Centos 7 :
 ```
 # yum install php-embedded php-cli php-devel 
 ```

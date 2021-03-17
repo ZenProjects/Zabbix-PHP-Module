@@ -14,11 +14,11 @@ With that module you can extend functionality of the Zabbix with PHP module at t
 
 # Prerequisite :
 
-The **PHP Embed SAPI - libphp[57].so** :
+The **PHP Embed SAPI - libphp[57].so** (tested with v5.6 and v7.4) :
 
 Install it on ubuntu trusty :
 ```
-# apt-get install libphp5-embed php5-dev
+# apt-get install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
 ```
 
 Install it on centos 7 :
@@ -26,11 +26,11 @@ Install it on centos 7 :
 # yum install php-embedded php-cli php-devel 
 ```
 
-Or compile it (the important option are "--enable-embed") from [php 5.6 source](https://github.com/php/php-src/tree/PHP-5.6) :
+Or compile it (the important option are "--enable-embed") from [php source](https://github.com/php/php-src) :
 ```
-# wget https://github.com/php/php-src/archive/PHP-5.6.tar.gz
-# tar xzvf php-5.6.tar.gz
-# cd php*5.6*
+# wget https://github.com/php/php-src/archive/PHP-x.x.tar.gz
+# tar xzvf php-x.x.tar.gz
+# cd php*/
 # ./buildconf
 # ./configure --enable-embed --prefix=/path/to/php/install/dir \
 		      --with-snmp=shared --with-ldap=shared --enable-shared=yes  \
@@ -38,7 +38,7 @@ Or compile it (the important option are "--enable-embed") from [php 5.6 source](
 # make
 # make install
 ```
-For example to have **libphp5.so** embeded library with snmp, ldap, curl and mysqli shared module.
+For example to have **libphp[57].so** embeded library with snmp, ldap, curl and mysqli shared module.
 
 # How to Build the module
 
@@ -46,7 +46,7 @@ Compile the **zbx_php** module with php :
 
 For have get zabbix include necessary to build the module you must download [zabbix source](http://www.zabbix.com/download.php) :
 ```
-# wget --content-disposition "https://sourceforge.net/projects/zabbix/files/latest/download?source=files"
+# wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.8.tar.gz"
 # tar xzvf zabbix*.tar.gz
 # cd zabbix*
 # ./configure

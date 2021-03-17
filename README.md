@@ -14,7 +14,7 @@ With that module you can extend functionality of the Zabbix with PHP module at t
 
 # Prerequisite :
 
-The **PHP v5.x Embed SAPI - libphp5.so** :
+The **PHP Embed SAPI - libphp[57].so** :
 
 Install it on ubuntu trusty :
 ```

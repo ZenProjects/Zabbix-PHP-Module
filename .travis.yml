@@ -31,7 +31,7 @@ before_install:
 - ./bootstrap.sh
 
 install: 
-- if [ "$TRAVIS_DIST" = "trusty" ]; then CFLAGS="-fdiagnostics-show-option -Wunused-macros" PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1); fi
+- if [ "$TRAVIS_DIST" = "trusty" ]; then CFLAGS="-w" PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1); fi
 - if [ "$TRAVIS_DIST" = "focal" ]; then PATH=/usr/bin:$PATH ./configure --prefix=/home/ubuntu/src/github.com/ZenProjects/test --with-php=/usr  --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1); fi
 
 script:

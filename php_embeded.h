@@ -35,14 +35,6 @@
 #include "TSRM.h"
 #include "zend_exceptions.h"
 
-// this macro are defined in php and in zabbix
-// to avoid warning in redefiniting it they are undef her befor 
-// zabbix header inclusion
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-#undef PACKAGE_NAME
-
 #if PHP_VERSION_ID >= 70000
  #define PTSRMLS_DC
 #endif

@@ -44,16 +44,18 @@
 #include "common/zbxsysinc.h"
 #include "common/zbxtypes.h"
 #icnlude "zbxcommon.h"
+#include "zbxcfg.h"
+#include "zbxlog.h"
 #else 
 #include "sysinc.h"
 #include "common.h"
+#include "cfg.h"
+#include "log.h"
 #endif
 
 #include "module.h"
 #include "version.h"
 //#include "db.h"
-#include "cfg.h"
-#include "log.h"
 //#include "sysinfo.h"
 
 #include "GetPathDir.h"

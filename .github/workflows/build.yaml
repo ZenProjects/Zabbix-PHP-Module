@@ -15,7 +15,6 @@ jobs:
         git version
         pwd
         cd ${RUNNER_WORKSPACE}
-        env 
         rm -rf $(basename ${GITHUB_REPOSITORY})
         git clone ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git 
         cd $(basename ${GITHUB_REPOSITORY}) 

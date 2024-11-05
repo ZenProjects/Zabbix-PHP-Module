@@ -131,7 +131,7 @@ int load_php_env_config(void)  {
     // use zabbix config parser
 	#if ZABBIX_VERSION_MAJOR >= 6
     if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT,ZBX_CFG_EXIT_FAILURE)!=SUCCESS)
-	else
+	#else
 	if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)
 	#endif
     {

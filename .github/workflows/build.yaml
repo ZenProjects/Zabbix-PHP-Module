@@ -42,6 +42,7 @@ jobs:
                           --prefix=$PWD/test \
                           --with-php=/usr  \
                           --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
+        cat zbx_php_config.h
     - name: zabbix module make
       run: make
 
@@ -74,6 +75,7 @@ jobs:
                         --prefix=$PWD/test \
                         --with-php=/usr  \
                         --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
+        cat zbx_php_config.h
     - name: zabbix module make
       run: make
 

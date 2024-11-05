@@ -7,11 +7,15 @@ jobs:
 
     runs-on: ubuntu-latest
     container: ubuntu:14.04
-    pre-steps:
-    - uses: actions/checkout@v4
     steps:
     - name: setup os 
-      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get -y install wget libz-dev libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
+      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get -y install wget libz-dev libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev git
+    - name: git checkout
+      run: |
+        git version
+        pwd
+        env 
+        exit 0
     - name: patch php 
       run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h
     - name: zabbix source install and configure

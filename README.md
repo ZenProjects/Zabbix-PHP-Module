@@ -1,20 +1,23 @@
-[![Build Status](https://travis-ci.com/ZenProjects/Zabbix-PHP-Module.svg?branch=master)](https://travis-ci.com/ZenProjects/Zabbix-PHP-Module)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
-[![](https://piwik.ch2o.info/piwik.php?idsite=4)](https://piwik.ch2o.info)
 
 # Zabbix PHP Loadable Module :
 
-This directory contains Zabbix [Loadable module](https://www.zabbix.com/documentation/3.2/manual/config/items/loadablemodules), which extends functionality of Zabbix Agent/Server/Proxy.
+This directory contains Zabbix `Loadable module` [v3.x-6.x](https://www.zabbix.com/documentation/6.0/en/manual/config/items/loadablemodules) and [v7.x](https://www.zabbix.com/documentation/7.0/en/manual/extensions/loadablemodules?hl=Loadable%2Cmodules), which extends functionality of Zabbix Agent/Server/Proxy.
 
 This module add the ability to load PHP interpreter inside Zabbix Server/Proxy/Agent address space.
 
-Is based on my precedente work https://www.zabbix.com/forum/showthread.php?t=8305 to add the possibility to call script inside the zabbix engine. At this time I talked with Alexei Vladishev to add the ability to load module ... Now it's done! 
+Is based on my precedente work https://www.zabbix.com/forum/showthread.php?t=8305 to add the possibility to call script inside the zabbix engine. At this time I talked with Alexei Vladishev when it's comme to Paris to add the ability to load module ... Now it's done! 
 
 With that module you can extend functionality of the Zabbix with PHP module at the infinite.
 
 # Prerequisite :
 
-The **PHP Embed SAPI - libphp[57].so** (tested with v5.6 and v7.4) :
+- Support **PHP Embed SAPI** v5.x and v7.x.
+- Support Zabbix 4.0.x/5.0.x/6.0.x/7.0.x.
+
+Has been only tested with Linux Ubuntu 14.04/20.04/24.04 with php5.6 and 7.4..
+
+# Install php needed packages:
 
 Install it on Ubuntu Trusty :
 ```
@@ -26,9 +29,13 @@ Install it on Ubuntu Focal :
 # apt-get install libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libargon2-0 libsodium-dev
 ```
 
-Install it on Centos 7 :
+Install it on Ubuntu noble :
 ```
-# yum install php-embedded php-cli php-devel 
+# apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get install -y software-properties-common
+# add-apt-repository ppa:ondrej/php
+# DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris  apt-get -y install libz-dev wget \
+                                           libphp7.4-embed php7.4-dev autoconf automake gcc make \
+                                           libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libsodium-dev
 ```
 
 Or compile it (the important option are "--enable-embed") from [php source](https://github.com/php/php-src) :
@@ -49,7 +56,9 @@ For example to have **libphp[57].so** embeded library with snmp, ldap, curl and 
 
 Compile the **zbx_php** module with php :
 
-For have get zabbix include necessary to build the module you must download [zabbix source](http://www.zabbix.com/download.php) :
+We need Zabbix source for building the module, because we need the zabbix include header to build the module.
+
+You must download [zabbix source](http://www.zabbix.com/download.php) :
 ```
 # wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.8.tar.gz"
 # tar xzvf zabbix*.tar.gz
@@ -58,7 +67,7 @@ For have get zabbix include necessary to build the module you must download [zab
 # cd -
 ```
 
-Them compile the module.
+Them compile the PHP module.
 ```
 # ./bootstrap.sh
 # ./configure --with-php=/path/to/php/script/php-config 

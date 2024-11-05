@@ -51,6 +51,7 @@
 #include "zbxcfg.h"
 #include "zbxlog.h"
 #include "zbxstr.h"
+extern static char	*config_file;
 #else 
 #include "sysinc.h"
 #include "common.h"
@@ -64,6 +65,7 @@
 #include "GetPathDir.h"
 
 extern char 	*CONFIG_LOAD_MODULE_PATH;
+
 
 #endif
 

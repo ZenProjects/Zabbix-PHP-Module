@@ -112,7 +112,7 @@ int load_php_env_config(void)  {
     char conf_file[MAX_STRING_LEN];
     char base_path[MAX_STRING_LEN];
     int ret=0;
-	#if ZABBIX_VERSION_MAJOR >=7
+	#if ZABBIX_VERSION_MAJOR <7
     static struct cfg_line cfg[] = {
 	    { "PHP_SCRIPT_PATH", &php_path, TYPE_STRING, PARM_MAND, 0, 0 },
 	    { NULL },

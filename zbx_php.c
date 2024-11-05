@@ -112,10 +112,17 @@ int load_php_env_config(void)  {
     char conf_file[MAX_STRING_LEN];
     char base_path[MAX_STRING_LEN];
     int ret=0;
+	#if ZABBIX_VERSION_MAJOR >=7
     static struct cfg_line cfg[] = {
 	    { "PHP_SCRIPT_PATH", &php_path, TYPE_STRING, PARM_MAND, 0, 0 },
 	    { NULL },
     };
+	#else
+    static struct cfg_line cfg[] = {
+	    { "PHP_SCRIPT_PATH", &php_path, ZBX_CFG_TYPE_STRING , ZBX_CONF_PARM_MAND, 0, 0 },
+	    { NULL },
+    };
+	#endif
     // CONFIG_FILE are populated a execution time with the default compiled path 
     // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
     // then get basepath and add zbx_php.cfg.
@@ -129,7 +136,9 @@ int load_php_env_config(void)  {
     zabbix_log( LOG_LEVEL_INFORMATION, ZBX_MODULE "Module Config lodaded from %s", conf_file);
     
     // use zabbix config parser
-	#if ZABBIX_VERSION_MAJOR >= 6
+	#if ZABBIX_VERSION_MAJOR >= 7
+    if (zbx_parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT,ZBX_CFG_EXIT_FAILURE)!=SUCCESS)
+	#elif ZABBIX_VERSION_MAJOR >= 6
     if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT,ZBX_CFG_EXIT_FAILURE)!=SUCCESS)
 	#else
 	if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)

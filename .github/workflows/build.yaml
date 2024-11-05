@@ -24,12 +24,14 @@ jobs:
         wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/oldstable/4.0/zabbix-4.0.50.tar.gz"; 
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
-        export ZABBIX_PATH=$PWD
         ./configure
         cd -
         ./bootstrap.sh
     - name: zabbix module configure
       run: |
+        cd zabbix*/
+        export ZABBIX_PATH=$PWD
+        cd -
         CFLAGS="-w" PATH=/usr/bin:$PATH ./configure \
                           --prefix=$PWD/test \
                           --with-php=/usr  \
@@ -54,12 +56,14 @@ jobs:
         wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.44.tar.gz"; 
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
-        export ZABBIX_PATH=$PWD
         ./configure
         cd -
         ./bootstrap.sh
     - name: zabbix module configure
       run: |
+        cd zabbix*/
+        export ZABBIX_PATH=$PWD
+        cd -
         PATH=/usr/bin:$PATH ./configure \
                         --prefix=$PWD/test \
                         --with-php=/usr  \

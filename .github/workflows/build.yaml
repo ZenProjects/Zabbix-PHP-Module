@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: ncipollo/release-action@4c75f0f2e4ae5f3c807cf0904605408e319dcaac
     - name: setup os 
-      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get -y install wget libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
+      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get -y install wget libz-dev libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
     - name: patch php 
       run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h
     - name: zabbix source install and configure
@@ -45,7 +45,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: setup os 
-      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris  apt-get -y install wget libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libargon2-0 libsodium-dev
+      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris  apt-get -y install libz-dev wget libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libargon2-0 libsodium-dev
     - name: zabbix source install and configure
       run: |
         find /usr/lib /lib -name "libphp*so*"

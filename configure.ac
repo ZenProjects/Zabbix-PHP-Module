@@ -37,8 +37,7 @@ MODULE_NAME=zbx_php
 dnl Checking for Zabbix directory
 ZABBIX_DIR
 
-AC_CHECK_HEADER([sysinc.h])
-AC_CHECK_HEADER([common/zbxsysinc.h])
+AC_CHECK_HEADERS(sysinc.h common/zbxsysinc.h)
 AC_SUBST([MODULE_NAME])
 AC_SUBST([CFLAGS])
 AC_SUBST([LDFLAGS])

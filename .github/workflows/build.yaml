@@ -37,7 +37,7 @@ jobs:
     - name: zabbix module make
       run: make
 
-  build-trusty:
+  build-focal:
 
     runs-on: ubuntu-latest
     container: ubuntu:20.04

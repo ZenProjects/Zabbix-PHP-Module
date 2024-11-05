@@ -114,6 +114,7 @@ jobs:
         PATH=/usr/bin:$PATH ./configure \
                         --prefix=$PWD/test \
                         --with-php=/usr  \
-                        --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;cat zbx_php_config.h; exit 1)
+                        --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log; exit 1)
+        cat zbx_php_config.h
     - name: zabbix module make
       run: make

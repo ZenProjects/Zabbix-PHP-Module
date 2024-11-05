@@ -15,11 +15,16 @@ jobs:
         git version
         pwd
         env 
-        exit 0
+        rm -rf $(basename $GITHUB_REPOSITORY)
+        git clone https://github.com/$GITHUB_REPOSITORY.git 
+        git reset --hard $GITHUB_SHA
+        cd $(basename $GITHUB_REPOSITORY) 
+        exit -1
     - name: patch php 
       run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h
     - name: zabbix source install and configure
       run: |
+        cd $(basename $GITHUB_REPOSITORY)
         find /usr/lib /lib -name "libphp*so*"
         cat /etc/*release
         rm -f zabbix*
@@ -31,6 +36,7 @@ jobs:
         ./bootstrap.sh
     - name: zabbix module configure
       run: |
+        cd $(basename $GITHUB_REPOSITORY)
         cd zabbix*/
         export ZABBIX_PATH=$PWD
         cd -

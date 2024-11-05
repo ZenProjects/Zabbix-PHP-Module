@@ -93,6 +93,7 @@ jobs:
                                            libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libsodium-dev
     - name: zabbix source install and configure
       run: |
+        set -x
         find /usr/lib /lib -name "libphp*so*"
         cat /etc/*release
         rm -f zabbix*
@@ -101,7 +102,7 @@ jobs:
         wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/7.0/zabbix-7.0.5.tar.gz"
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
-        find . -ls
+        find $PWD -ls
         ./configure
         cd -
         ./bootstrap.sh

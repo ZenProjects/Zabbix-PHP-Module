@@ -1,0 +1,68 @@
+name: Build CI
+
+on:
+  push: {}
+  pull_request: {}
+
+jobs:
+  build-trusty:
+
+    runs-on: ubuntu-latest
+    container: ubuntu:14.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: setup os 
+      run: apt-get update && apt-get -y install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
+    - name: patch php 
+      run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h;
+    - name: zabbix source install and configure
+      run: |
+        find /usr/lib /lib -name "libphp*so*"
+        cat /etc/*release
+        rm -f zabbix*
+        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/oldstable/4.0/zabbix-4.0.50.tar.gz"; fi
+        tar xzvf zabbix*.tar.gz
+        cd zabbix*/
+        export ZABBIX_PATH=$PWD
+        ./configure
+        cd -
+        ./bootstrap.sh
+    - name: zabbix module configure
+      run: |
+        CFLAGS="-w" PATH=/usr/bin:$PATH ./configure \
+                          --prefix=$PWD/test \
+                          --with-php=/usr  \
+                          --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
+    - name: zabbix module make
+      run: make
+
+  build-trusty:
+
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: setup os 
+      run: apt-get update && apt-get -y install apt-get install libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libargon2-0 libsodium-dev
+    - name: zabbix source install and configure
+      run: |
+        find /usr/lib /lib -name "libphp*so*"
+        cat /etc/*release
+        rm -f zabbix*
+        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.44.tar.gz"; fi
+        tar xzvf zabbix*.tar.gz
+        cd zabbix*/
+        export ZABBIX_PATH=$PWD
+        ./configure
+        cd -
+        ./bootstrap.sh
+    - name: zabbix module configure
+      run: |
+        PATH=/usr/bin:$PATH ./configure \
+                        --prefix=$PWD/test \
+                        --with-php=/usr  \
+                        --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
+    - name: zabbix module make
+      run: make

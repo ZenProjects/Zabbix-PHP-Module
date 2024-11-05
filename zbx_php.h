@@ -51,7 +51,7 @@
 #include "zbxcfg.h"
 #include "zbxlog.h"
 #include "zbxstr.h"
-extern static char	*config_file;
+extern char	*config_file;
 #else 
 #include "sysinc.h"
 #include "common.h"

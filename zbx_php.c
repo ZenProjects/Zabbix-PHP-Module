@@ -123,10 +123,14 @@ int load_php_env_config(void)  {
 	    { NULL },
     };
 	#endif
-    // CONFIG_FILE are populated a execution time with the default compiled path 
+    // CONFIG_FILE/config_file are populated a execution time with the default compiled path 
     // (DEFAULT_CONFIG_FILE) or path set in zabbix commande line (with -c or --config) 
     // then get basepath and add zbx_php.cfg.
+	#if ZABBIX_VERSION_MAJOR >= 7
+    if ((ret=get_base_path_from_pathname(config_file,strlen(config_file),base_path,MAX_STRING_LEN))!=MCA_SUCCESS)
+	#else
     if ((ret=get_base_path_from_pathname(CONFIG_FILE,strlen(CONFIG_FILE),base_path,MAX_STRING_LEN))!=MCA_SUCCESS)
+	#endif
     {
       zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config get base path error : %d!!!!", ret);
       return ZBX_MODULE_FAIL;

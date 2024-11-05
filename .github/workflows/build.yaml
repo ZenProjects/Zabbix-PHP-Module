@@ -17,8 +17,8 @@ jobs:
         env 
         rm -rf $(basename ${GITHUB_REPOSITORY})
         git clone ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git 
-        git reset --hard ${GITHUB_SHA}
         cd $(basename ${GITHUB_REPOSITORY}) 
+        git reset --hard ${GITHUB_SHA}
         exit -1
     - name: patch php 
       run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h

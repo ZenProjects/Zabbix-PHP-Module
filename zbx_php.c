@@ -129,7 +129,11 @@ int load_php_env_config(void)  {
     zabbix_log( LOG_LEVEL_INFORMATION, ZBX_MODULE "Module Config lodaded from %s", conf_file);
     
     // use zabbix config parser
-    if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)
+	#if ZABBIX_VERSION_MAJOR >= 6
+    if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT,ZBX_CFG_EXIT_FAILURE)!=SUCCESS)
+	else
+	if (parse_cfg_file(conf_file, cfg, ZBX_CFG_FILE_OPTIONAL, ZBX_CFG_STRICT)!=SUCCESS)
+	#endif
     {
        zabbix_log( LOG_LEVEL_ERR, ZBX_MODULE "load_php_env_config parse file error!!!!");
        return ZBX_MODULE_FAIL;

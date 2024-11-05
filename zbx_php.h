@@ -43,6 +43,7 @@
 #include "sysinc.h"
 #include "module.h"
 #include "common.h"
+#include "version.h"
 //#include "db.h"
 #include "cfg.h"
 #include "log.h"

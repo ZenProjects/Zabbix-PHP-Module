@@ -97,7 +97,8 @@ jobs:
         cat /etc/*release
         rm -f zabbix*
         # wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.44.tar.gz" 
-        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/6.0/zabbix-6.0.35.tar.gz"
+        # wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/6.0/zabbix-6.0.35.tar.gz"
+        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/7.0/zabbix-7.0.5.tar.gz"
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
         ./configure

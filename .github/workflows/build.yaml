@@ -15,13 +15,13 @@ jobs:
     - name: setup os 
       run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris apt-get -y install libphp5-embed php5-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libdb5.3-dev
     - name: patch php 
-      run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h;
+      run: sed -ie "s#uint _res:31#uint res:31#" /usr/include/php5/main/php_output.h
     - name: zabbix source install and configure
       run: |
         find /usr/lib /lib -name "libphp*so*"
         cat /etc/*release
         rm -f zabbix*
-        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/oldstable/4.0/zabbix-4.0.50.tar.gz"; fi
+        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/oldstable/4.0/zabbix-4.0.50.tar.gz"; 
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
         export ZABBIX_PATH=$PWD
@@ -51,7 +51,7 @@ jobs:
         find /usr/lib /lib -name "libphp*so*"
         cat /etc/*release
         rm -f zabbix*
-        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.44.tar.gz"; fi
+        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.44.tar.gz"; 
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
         export ZABBIX_PATH=$PWD

@@ -39,8 +39,11 @@
 // autoconf include
 #include "zbx_php_config.h"
 
+#include "module.h"
+#include "version.h"
+
 // zabbix include
-#ifndef HAVE_SYSINC_H
+#if ZABBIX_VERSION_MAJOR >=7
 #include "common/zbxsysinc.h"
 #include "common/zbxtypes.h"
 #include "zbxcommon.h"
@@ -53,8 +56,6 @@
 #include "log.h"
 #endif
 
-#include "module.h"
-#include "version.h"
 //#include "db.h"
 //#include "sysinfo.h"
 

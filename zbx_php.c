@@ -118,7 +118,7 @@ int load_php_env_config(void)  {
 	    { NULL },
     };
 	#else
-    static struct cfg_line cfg[] = {
+    static cfg_line cfg[] = {
 	    { "PHP_SCRIPT_PATH", &php_path, ZBX_CFG_TYPE_STRING , ZBX_CONF_PARM_MAND, 0, 0 },
 	    { NULL },
     };

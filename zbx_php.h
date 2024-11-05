@@ -49,6 +49,7 @@
 #include "zbxcommon.h"
 #include "zbxcfg.h"
 #include "zbxlog.h"
+#include "zbxstr.h"
 #else 
 #include "sysinc.h"
 #include "common.h"

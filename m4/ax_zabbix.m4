@@ -35,6 +35,8 @@ AC_HELP_STRING([--with-zabbix-include@<:@=DIR@:>@], [Zabbix include directory]) 
     # make sure that a well known include file exists
     if test -e $with_zabbix_include/sysinc.h; then
       AC_MSG_RESULT( found!)
+    else if test -e $with_zabbix_include/zbxcommon.h; then
+      AC_MSG_RESULT( found!)
     else
       AC_MSG_ERROR( $with_zabbix_include not found. )
     fi

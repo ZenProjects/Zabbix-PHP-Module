@@ -39,7 +39,7 @@ AC_HELP_STRING([--with-zabbix-include@<:@=DIR@:>@], [Zabbix include directory]) 
       AC_MSG_ERROR( $with_zabbix_include not found. )
     fi
     ZABBIX_INC_DIR=$with_zabbix_include
-    CPPFLAGS="-I$ZABBIX_INC_DIR"
+    CPPFLAGS="-I$ZABBIX_INC_DIR -I$ZABBIX_INC_DIR/common"
   fi
 
   AC_SUBST([ZABBIX_INC_DIR])

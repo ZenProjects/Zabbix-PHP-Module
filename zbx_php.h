@@ -42,6 +42,7 @@
 // zabbix include
 #ifndef HAVE_SYSINC_H
 #include "common/zbxsysinc.h"
+#include "common/zbxtypes.h"
 #else 
 #include "sysinc.h"
 #endif

@@ -1,6 +1,6 @@
 MODULE_NAME=@MODULE_NAME@
 MODULE_OBJS=php_embeded.o GetPathDir.o $(MODULE_NAME).o
-CFLAGS=-fPIC -I@ZABBIX_INC_DIR@ @CFLAGS@ -Wno-cpp
+CFLAGS=-fPIC -I@ZABBIX_INC_DIR@ -I@ZABBIX_INC_DIR@/common @CFLAGS@ -Wno-cpp
 LDFLAGS=@LDFLAGS@  -Wl,--no-as-needed
 LIBS=@LIBS@
 CC=gcc

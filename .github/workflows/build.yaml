@@ -104,6 +104,7 @@ jobs:
         wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/7.0/zabbix-7.0.5.tar.gz"
         tar xzvf zabbix*.tar.gz
         cd zabbix*/
+        find include 
         ./configure
         cd -
         ./bootstrap.sh

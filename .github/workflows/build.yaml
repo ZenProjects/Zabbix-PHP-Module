@@ -76,3 +76,35 @@ jobs:
                         --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
     - name: zabbix module make
       run: make
+
+  build-noble:
+
+    runs-on: ubuntu-latest
+    container: ubuntu:24.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: setup os 
+      run: apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris  apt-get -y install libz-dev wget libphp-embed php-dev autoconf automake gcc make libpcre3-dev libbz2-dev libbz2-dev libxml2-dev libkrb5-dev libargon2-dev libargon2-1 libargon2-0 libsodium-dev
+    - name: zabbix source install and configure
+      run: |
+        find /usr/lib /lib -name "libphp*so*"
+        cat /etc/*release
+        rm -f zabbix*
+        wget --content-disposition "https://cdn.zabbix.com/zabbix/sources/stable/5.0/zabbix-5.0.44.tar.gz"; 
+        tar xzvf zabbix*.tar.gz
+        cd zabbix*/
+        ./configure
+        cd -
+        ./bootstrap.sh
+    - name: zabbix module configure
+      run: |
+        cd zabbix*/
+        export ZABBIX_PATH=$PWD
+        cd -
+        PATH=/usr/bin:$PATH ./configure \
+                        --prefix=$PWD/test \
+                        --with-php=/usr  \
+                        --with-zabbix-include=$ZABBIX_PATH/include  || (cat config.log;exit 1)
+    - name: zabbix module make
+      run: make

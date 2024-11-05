@@ -4,3 +4,9 @@
 
 /* Define to 1 if zend_signal_startup exist. */
 #undef HAVE_ZEND_SIGNAL_STARTUP
+
+/* Define to 1 if "sysinc.h" exist. */
+#undef HAVE_SYSINC_H
+
+/* Define to 1 if "common/zbxsysinc.h" exist. */
+#undef HAVE_COMMON_ZBXSYSINC_H

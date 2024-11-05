@@ -45,10 +45,10 @@
 #include "common/zbxtypes.h"
 #else 
 #include "sysinc.h"
+#include "common.h"
 #endif
 
 #include "module.h"
-#include "common.h"
 #include "version.h"
 //#include "db.h"
 #include "cfg.h"

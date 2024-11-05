@@ -43,7 +43,7 @@
 #ifndef HAVE_SYSINC_H
 #include "common/zbxsysinc.h"
 #include "common/zbxtypes.h"
-#icnlude "zbxcommon.h"
+#include "zbxcommon.h"
 #include "zbxcfg.h"
 #include "zbxlog.h"
 #else 

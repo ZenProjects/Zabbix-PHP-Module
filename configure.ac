@@ -35,7 +35,7 @@ LIBS="${SERVER_LIBS} ${PHP_LIBS}"
 MODULE_NAME=zbx_php
 
 dnl Checking for Zabbix directory
-ZABBIX_DIR
+AC_CHECK_ZABBIX_DIR
 
 AC_CHECK_HEADERS(sysinc.h common/zbxsysinc.h)
 AC_SUBST([MODULE_NAME])

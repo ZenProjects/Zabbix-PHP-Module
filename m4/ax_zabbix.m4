@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-AC_DEFUN([ZABBIX_DIR],[
+AC_DEFUN([AC_CHECK_ZABBIX_DIR],[
 
   AC_ARG_WITH(
     zabbix-include,
@@ -39,6 +39,7 @@ AC_HELP_STRING([--with-zabbix-include@<:@=DIR@:>@], [Zabbix include directory]) 
       AC_MSG_ERROR( $with_zabbix_include not found. )
     fi
     ZABBIX_INC_DIR=$with_zabbix_include
+    AP_INCLUDE_DIR="-I$ZABBIX_INC_DIR"
   fi
 
   AC_SUBST([ZABBIX_INC_DIR])

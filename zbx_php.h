@@ -40,7 +40,12 @@
 #include "zbx_php_config.h"
 
 // zabbix include
+#ifdef HAVE_SYSINC_H
 #include "sysinc.h"
+#else 
+#include "common/zbxsysinc.h"
+#endif
+
 #include "module.h"
 #include "common.h"
 #include "version.h"

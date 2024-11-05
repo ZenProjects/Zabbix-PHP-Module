@@ -109,7 +109,7 @@ AC_HELP_STRING([--with-php_lib@<:@=DIR@:>@], [PHP lib subdirectory if different 
 	    AC_CHECK_LIB(php5, php_embed_init,[ PHP_LIBS="-lphp5" ], [ 
 	      AC_CHECK_LIB(php7, php_embed_init,[ PHP_LIBS="-lphp7" ], [ AC_MSG_ERROR([Not found php embeded library]) ]) 
 	    ])
-	    dnl AC_CHECK_LIB(php7, php_embed_init,[ PHP_LIBS="-lphp7" ], [ AC_MSG_ERROR([Not found php embeded library]) ]))
+	    
 	    AC_CHECK_LIB(php7, zend_signal_startup,[ AC_DEFINE(HAVE_ZEND_SIGNAL_STARTUP,[1],[zend_signal_startup are available]) ])
 	    LIBS="${_save_php_libs}"
 	    LDFLAGS="${_save_php_ldflags}"
